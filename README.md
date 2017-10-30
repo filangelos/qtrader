@@ -1,5 +1,13 @@
 # qtrader
-> Algorithmic Trading using Q-Learning and Recurrent Reinforcement Learning
+> Q-Learning for Portfolio Management
+
+## Why Q-Learning?
+
+1. Learns the **optimal action**, rather than models the market.
+2. Adaptive to temporary changes of the market, due to its online training.
+3. Optimizes the long-term (cumulative) reward, rather than the instantaneous benefit.
+
+
 
 ## Setup
 
@@ -17,9 +25,15 @@
 
 ### Papers
 
+#### Reinforcement Learning & Trading
+
 - [Algorithm Trading using Q-Learning and Recurrent Reinforcement Learning ](http://cs229.stanford.edu/proj2009/LvDuZhai.pdf)
 - [Agent Inspired Trading Using Recurrent Reinforcement Learning and LSTM Neural Networks](https://arxiv.org/pdf/1707.07338.pdf)
 - [A Multi-agent Q-learning Framework for Optimizing Stock Trading Systems](https://link.springer.com/chapter/10.1007/3-540-46146-9_16)
+- [Deep Q-trading](http://cslt.riit.tsinghua.edu.cn/mediawiki/images/5/5f/Dtq.pdf)
+- [Reinforcement Learning in Online Stock Trading Systems](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.83.5299&rep=rep1&type=pdf)
+- [Portfolio Management using Reinforcement Learning](http://cs229.stanford.edu/proj2016/report/JinElSaawy-PortfolioManagementusingReinforcementLearning-report.pdf)
+- [A Deep Reinforcement Learning Framework for the Financial Portfolio Management Problem](https://arxiv.org/pdf/1706.10059.pdf)
 
 ### Articles
 
@@ -31,3 +45,5 @@
 - [QLearning_Trading](https://github.com/ucaiado/QLearning_Trading)
 - [stockgym](https://github.com/sentrip/stockgym/tree/master/src)
 - [sl-quant](https://github.com/danielzak/sl-quant)
+- [Trading Gym](https://github.com/Prediction-Machines/Trading-Gym)
+- [DQN](https://github.com/jjakimoto/DQN)
