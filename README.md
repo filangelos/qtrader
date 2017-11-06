@@ -13,7 +13,7 @@
 
 ### macOS
 
-* `make setup`
+* `source scripts/setup.sh`
 
 ## Resources
 

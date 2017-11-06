@@ -18,6 +18,6 @@ fi
 # activate virtual environment
 source "./${ENV}/bin/activate"
 # run tests using `pytest`
-pytest
+python -m pytest .
 # clean environemnt
 source scripts/clean.sh

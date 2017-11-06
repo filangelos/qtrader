@@ -1,22 +1,17 @@
+# scientific computing
 import numpy as np
 
 
-class _Transform:
+class _Transform(object):
+    """Base class for transformations."""
 
     @classmethod
-    def transform(cls, X, *args, **kwargs):
-        raise NotImplementedError
-
-    @staticmethod
-    def _func():
-        raise NotImplementedError
-
-    @staticmethod
-    def _get_params(self):
+    def transform(cls, X):
         raise NotImplementedError
 
 
 class Noise(_Transform):
+    """Additive noise transformation."""
 
     @staticmethod
     def _func(X):
@@ -28,6 +23,7 @@ class Noise(_Transform):
 
 
 class Sinusoidal(_Transform):
+    """Sinusoidal series transformation."""
 
     @staticmethod
     def _get_params(N):
@@ -43,10 +39,11 @@ class Sinusoidal(_Transform):
     @classmethod
     def transform(cls, X):
         _N = X.shape[0]
-        return np.asarray(list(map(cls._func, *(cls._get_params(_N) + (X,)))))
+        return np.array(list(map(cls._func, *(cls._get_params(_N) + (X,)))))
 
 
 class Pipeline(_Transform):
+    """Composite transformation, linear pipeline of transformations."""
 
     def __init__(self, transforms):
         self.transforms = transforms
