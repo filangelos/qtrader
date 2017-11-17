@@ -1,5 +1,11 @@
 # scientific computing
 import numpy as np
+import pandas as pd
+
+# Quandl library
+import os
+import quandl as _quandl
+_quandl.ApiConfig.api_key = os.environ['QUANDL_API_KEY']
 
 
 class _Transform(object):
@@ -53,3 +59,61 @@ class Pipeline(_Transform):
         for _transform in self.transforms:
             _X = _transform.transform(_X)
         return _X
+
+
+class Quandl:
+    """Quandl Wrapper."""
+    start_date = None
+    end_date = None
+
+    @staticmethod
+    def _get(ticker, **kwargs):
+        """Helpder method for `quandl.get`.
+
+        Parameters
+        ----------
+        ticker: str
+            Ticker name
+        **kwargs: dict
+            Arguments for `quandl.get`
+
+        Returns
+        -------
+        df: pandas.DataFrame
+            Table of prices for `ticker`
+        """
+        return _quandl.get('WIKI/%s' % ticker, **kwargs)
+
+    @classmethod
+    def Returns(cls, tickers):
+        """Get daily returns for `tickers`.
+
+        Parameters
+        ----------
+        tickers: list
+            List of ticker names
+
+        Returns
+        -------
+        df: pandas.DataFrame
+            Table of Returns of Adjusted Close prices for `tickers`
+        """
+        return pd.DataFrame.from_dict({ticker: cls._get(ticker, start_date=cls.start_date,
+                                                        end_date=cls.end_date, transformation="rdiff")['Adj. Close'] for ticker in tickers})
+
+    @classmethod
+    def Prices(cls, tickers):
+        """Get daily prices for `tickers`.
+
+        Parameters
+        ----------
+        tickers: list
+            List of ticker names
+
+        Returns
+        -------
+        df: pandas.DataFrame
+            Table of Adjusted Close prices for `tickers`
+        """
+        return pd.DataFrame.from_dict({ticker: cls._get(ticker, start_date=cls.start_date,
+                                                        end_date=cls.end_date)['Adj. Close'] for ticker in tickers})

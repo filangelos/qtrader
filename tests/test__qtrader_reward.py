@@ -33,6 +33,7 @@ pipe = qt.data.Pipeline([qt.data.Sinusoidal, qt.data.Noise])
 # closing prices
 U = pipe.transform(X)
 
+# truncate negative prices
 U[U < 0] = 0
 
 # price relative matrix
