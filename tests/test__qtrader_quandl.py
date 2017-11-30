@@ -1,3 +1,7 @@
+# matplotlib backtest for missing $DISPLAY
+import matplotlib
+matplotlib.use('Agg')
+
 # scientific computing
 import numpy as np
 
@@ -18,4 +22,4 @@ qt.data.Quandl.end_date = end_date
 data = qt.data.Quandl.Returns(universe)
 
 data[universe[0]].hist(bins=50)
-plt.show()
+plt.savefig('tests/tmp/test__qtrader_quandl.pdf', format='pdf', dpi=300)

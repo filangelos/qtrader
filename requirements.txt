@@ -10,3 +10,4 @@ Quandl
 pandas-datareader
 jupyter
 seaborn
+ptpython
