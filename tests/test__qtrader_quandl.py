@@ -14,12 +14,21 @@ import seaborn as sns
 start_date = '2015-01-01'
 end_date = '2017-01-01'
 
-universe = ['AAPL', 'GOOGL', 'MSFT', ]
+universe = ['AAPL', 'GOOGL', 'MSFT']
 
-qt.data.Quandl.start_date = start_date
-qt.data.Quandl.end_date = end_date
+qt.data.Market.start_date = start_date
+qt.data.Market.end_date = end_date
+qt.data.Market.source = 'yahoo'
 
-data = qt.data.Quandl.Returns(universe)
+returns = qt.data.Market.Returns(universe)
 
-data[universe[0]].hist(bins=50)
-plt.savefig('tests/tmp/test__qtrader_quandl.pdf', format='pdf', dpi=300)
+returns[universe[0]].hist(bins=50)
+plt.savefig('tests/tmp/test__qtrader_quandl_returns.pdf',
+            format='pdf', dpi=300)
+
+plt.figure()
+
+prices = qt.data.Market.Prices(universe)
+
+prices[universe[0]].plot()
+plt.savefig('tests/tmp/test__qtrader_quandl_prices.pdf', format='pdf', dpi=300)

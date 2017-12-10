@@ -2,10 +2,8 @@
 import numpy as np
 import pandas as pd
 
-# Quandl library
-import os
-import quandl as _quandl
-_quandl.ApiConfig.api_key = os.environ['QUANDL_API_KEY']
+# market data bundler
+import pandas_datareader.data as web
 
 
 class _Transform(object):
@@ -61,14 +59,16 @@ class Pipeline(_Transform):
         return _X
 
 
-class Quandl:
-    """Quandl Wrapper."""
+class Market:
+    """Market Data Wrapper."""
     start_date = None
     end_date = None
+    source = 'quandl'
+    _close_col = {'quandl': 'Close', 'yahoo': 'Adj Close'}
 
-    @staticmethod
-    def _get(ticker, **kwargs):
-        """Helpder method for `quandl.get`.
+    @classmethod
+    def _get(cls, ticker, **kwargs):
+        """Helpder method for `web.DataReader`.
 
         Parameters
         ----------
@@ -82,7 +82,7 @@ class Quandl:
         df: pandas.DataFrame
             Table of prices for `ticker`
         """
-        return _quandl.get('WIKI/%s' % ticker, **kwargs)
+        return web.DataReader(ticker, cls.source, **kwargs)
 
     @classmethod
     def Returns(cls, tickers):
@@ -98,8 +98,7 @@ class Quandl:
         df: pandas.DataFrame
             Table of Returns of Adjusted Close prices for `tickers`
         """
-        return pd.DataFrame.from_dict({ticker: cls._get(ticker, start_date=cls.start_date,
-                                                        end_date=cls.end_date, transformation="rdiff")['Adj. Close'] for ticker in tickers})
+        return cls.Prices(tickers).pct_change()[1:]
 
     @classmethod
     def Prices(cls, tickers):
@@ -115,5 +114,5 @@ class Quandl:
         df: pandas.DataFrame
             Table of Adjusted Close prices for `tickers`
         """
-        return pd.DataFrame.from_dict({ticker: cls._get(ticker, start_date=cls.start_date,
-                                                        end_date=cls.end_date)['Adj. Close'] for ticker in tickers})
+        return pd.DataFrame.from_dict({ticker: cls._get(ticker, start=cls.start_date,
+                                                        end=cls.end_date)[cls._close_col[cls.source]] for ticker in tickers})
