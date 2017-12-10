@@ -131,3 +131,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# tmp files
+tests/tmp/*
