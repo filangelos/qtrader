@@ -1,9 +1,15 @@
-import gym
+from __future__ import absolute_import
+from __future__ import division
+
 import numpy as np
+
+import gym
 from gym import spaces
 
 import logging
 import os
+
+import qtrader
 
 
 class TradingEnv(gym.Env):
@@ -49,27 +55,27 @@ class TradingEnv(gym.Env):
 
         Returns
         -------
-        ob, reward, episode_over, info : tuple
-            ob (object) :
+        observation, reward, episode_over, info : tuple
+            observation: object
                 an environment-specific object representing your observation of
                 the environment.
-            reward (float) :
+            reward: float
                 amount of reward achieved by the previous action. The scale
                 varies between environments, but the goal is always to increase
                 your total reward.
-            episode_over (bool) :
+            episode_over: bool
                 whether it's time to reset the environment again. Most (but not
                 all) tasks are divided up into well-defined episodes, and done
                 being True indicates the episode has terminated. (For example,
                 perhaps the pole tipped too far, or you lost your last life.)
-            info (dict) :
+            info: dict
                  diagnostic information useful for debugging. It can sometimes
                  be useful for learning (for example, it might contain the raw
                  probabilities behind the environment's last state change).
                  However, official evaluations of your agent are not allowed to
                  use this for learning.
         """
-        return ob, reward, episode_over, info
+        raise NotImplementedError
 
     def _reset(self):
         """
@@ -77,9 +83,10 @@ class TradingEnv(gym.Env):
 
         Returns
         -------
-        observation (object): the initial observation of the space.
+        observation: object
+            The initial observation of the space.
         """
-        return self._get_state()
+        raise NotImplementedError
 
     def _render(self, mode='human', close=False):
         pass

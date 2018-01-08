@@ -2,12 +2,10 @@ numpy
 scipy
 pandas
 matplotlib
-tensorflow
-sklearn
-keras
-keras
-Quandl
-pandas-datareader
-jupyter
 seaborn
+sklearn
+tensorflow
+pandas-datareader
+gym
+jupyter
 ptpython

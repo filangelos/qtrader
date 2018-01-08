@@ -19,7 +19,5 @@ virtualenv -p ${PYTHON} ${ENV}
 source "./${ENV}/bin/activate"
 # install dependencies to virtual environment
 pip install -r requirements.txt
-# install pytest to virtual environment
-pip install pytest
 # run tests
 source scripts/test.sh
