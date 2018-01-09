@@ -8,36 +8,36 @@ import unittest
 class TestSetup(unittest.TestCase):
     """Test Dependencies from `requirements.txt`."""
 
-    def test_numpy(self):
+    def test__numpy(self):
         import numpy as np
         return self.assertIsNotNone(np)
 
-    def test_scipy(self):
+    def test__scipy(self):
         import scipy
         return self.assertIsNotNone(scipy)
 
-    def test_pandas(self):
+    def test__pandas(self):
         import pandas as pd
         return self.assertIsNotNone(pd)
 
-    def test_mpl(self):
+    def test__mpl(self):
         import matplotlib as mpl
         mpl.use('Agg')
         return self.assertIsNotNone(mpl)
 
-    def test_sns(self):
+    def test__sns(self):
         import seaborn as sns
         return self.assertIsNotNone(sns)
 
-    def test_sklearn(self):
+    def test__sklearn(self):
         import sklearn
         return self.assertIsNotNone(sklearn)
 
-    def test_tensorflow(self):
+    def test__tensorflow(self):
         import tensorflow as tf
         return self.assertIsNotNone(tf)
 
-    def test_pandas_datareader(self):
+    def test__pandas_datareader(self):
         import pandas_datareader
         return self.assertIsNotNone(pandas_datareader)
 
