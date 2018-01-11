@@ -14,14 +14,15 @@ class TestEnvs(unittest.TestCase):
     def test__DailyReturnEnv(self):
         """Test `qtrader.envs.DailyReturnEnv` class."""
         env = qtrader.envs.DailyReturnEnv(
-            ['AAPL', 'MSFT', 'GOOGL'], start_date='2016-01-01')
+            ['AAPL', 'MSFT', 'GOOGL'], source='yahoo', start_date='2016-01-01')
         env.reset()
         done = False
         rewards = []
         np.random.seed(13)
         while not done:
-            _, r, done, _ = env.step(env.action_space.sample())  # random agent
-            rewards.append(r)
+            _, reward, done, _ = env.step(
+                env.action_space.sample())  # random agent
+            rewards.append(reward)
         return self.assertIsInstance(np.sum(rewards), float)
 
 

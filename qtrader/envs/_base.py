@@ -120,7 +120,7 @@ class TradingEnv(gym.Env):
                 Observation of the environment
             * reward: float
                 Reward received after this step
-            * episode_over: bool
+            * done: bool
                 Flag for finished episode
             * info: dict
                 Information about this step
@@ -132,9 +132,9 @@ class TradingEnv(gym.Env):
         self._counter += 1
         observation = self.data.loc[self.index, :]
         reward = np.dot(observation.values, action)
-        episode_over = self.index == self.data.index[-1]
+        done = self.index == self.data.index[-1]
         info = {}
-        return observation, reward, episode_over, info
+        return observation, reward, done, info
 
     def _reset(self):
         """
