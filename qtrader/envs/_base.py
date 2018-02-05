@@ -35,7 +35,7 @@ class PortfolioVector(gym.Space):
 
     def contains(self, x):
         """Assert if `x` in space."""
-        return x.shape == self.shape and (x >= self.low).all() and (x <= self.high).all() and (np.abs(x).sum() == 1.0)
+        return x.shape == self.shape and (x >= self.low).all() and (x <= self.high).all() and (np.abs(np.abs(x).sum() - 1.0) < 1e-5)
 
     @property
     def shape(self):
@@ -87,7 +87,7 @@ class TradingEnv(gym.Env):
             "`action_space`=%s" % (self.action_space))
 
         self.observation_space = spaces.Box(-np.inf,
-                                            np.inf, (self.num_instruments))
+                                            np.inf, (self.num_instruments,), dtype=np.float32)
         qtrader.framework.logger.info(
             "`observation_space`=%s" % (self.observation_space))
 
@@ -104,7 +104,7 @@ class TradingEnv(gym.Env):
     def _get_data(self, **kwargs):
         raise NotImplementedError
 
-    def _step(self, action):
+    def step(self, action):
         """
         The agent takes a step in the environment.
 
@@ -136,7 +136,7 @@ class TradingEnv(gym.Env):
         info = {}
         return observation, reward, done, info
 
-    def _reset(self):
+    def reset(self):
         """
         Reset the state of the environment and returns an initial observation.
 

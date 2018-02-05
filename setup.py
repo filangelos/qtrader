@@ -15,5 +15,6 @@ setup(name='qtrader',
           'tensorflow',
           'pandas-datareader',
           'gym'
-      ]
+      ],
+      test_suite='tests'
       )

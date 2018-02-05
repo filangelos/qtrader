@@ -14,7 +14,7 @@ class TestEnvs(unittest.TestCase):
     def test__DailyReturnEnv(self):
         """Test `qtrader.envs.DailyReturnEnv` class."""
         env = qtrader.envs.DailyReturnEnv(
-            ['AAPL', 'MSFT', 'GOOGL'], source='yahoo', start_date='2016-01-01')
+            ['WIKI/AAPL', 'WIKI/MSFT', 'WIKI/GOOGL'], source='quandl', start_date='2016-01-01')
         env.reset()
         done = False
         rewards = []

@@ -25,6 +25,34 @@ class TestAgents(unittest.TestCase):
             ob, reward, done, _ = env.step(action)
         return self.assertTrue(True)
 
+    def test__TangentAgent(self):
+        """Test `qtrader.agents.TangentAgent` class."""
+        env = qtrader.envs.DailyReturnEnv(
+            ['WIKI/AAPL', 'WIKI/MSFT', 'WIKI/GOOG'], source='quandl', start_date='2016-01-01')
+        # play with tangent portfolio agent
+        ob = env.reset()
+        reward = 0
+        done = False
+        tangent_agent = qtrader.agents.TangentAgent(env.action_space)
+        tangent_cumsum = 0
+        while not done:
+            tangent_agent.observe(ob)
+            action = tangent_agent.act(ob, reward, done)
+            ob, reward, done, _ = env.step(action)
+            tangent_cumsum += reward
+        # play with random agent
+        ob = env.reset()
+        reward = 0
+        done = False
+        random_agent = qtrader.agents.RandomAgent(env.action_space)
+        random_cumsum = 0
+        while not done:
+            action = random_agent.act(ob, reward, done)
+            ob, reward, done, _ = env.step(action)
+            random_cumsum += reward
+        # expect tangent to outperform random
+        return tangent_cumsum > random_cumsum
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -134,3 +134,9 @@ venv.bak/
 
 # tmp files
 tests/tmp/*
+
+# playground files
+playground
+
+# assets folder
+assets
