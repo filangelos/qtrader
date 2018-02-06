@@ -12,6 +12,6 @@ fi
 # activate virtual environment
 source "./${ENV}/bin/activate"
 # run tests using `pytest`
-python -m unittest tests/*
+python setup.py test
 # clean environemnt
 source scripts/clean.sh

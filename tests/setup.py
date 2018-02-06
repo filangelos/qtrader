@@ -33,13 +33,21 @@ class TestSetup(unittest.TestCase):
         import sklearn
         return self.assertIsNotNone(sklearn)
 
-    def test__tensorflow(self):
-        import tensorflow as tf
-        return self.assertIsNotNone(tf)
+    def test__pytorch(self):
+        import torch
+        return self.assertIsNotNone(torch)
+
+    def test__torchvision(self):
+        import torchvision
+        return self.assertIsNotNone(torchvision)
 
     def test__pandas_datareader(self):
         import pandas_datareader
         return self.assertIsNotNone(pandas_datareader)
+
+    def test__qtrader(self):
+        import qtrader
+        return self.assertIsNotNone(qtrader)
 
 
 if __name__ == '__main__':

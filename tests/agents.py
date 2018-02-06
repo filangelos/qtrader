@@ -9,6 +9,8 @@ import qtrader
 
 import gym
 
+CSV_PATH = 'tests/tmp/data/prices.csv'
+
 
 class TestAgents(unittest.TestCase):
     """Test `qtrader.agents` module."""
@@ -25,10 +27,23 @@ class TestAgents(unittest.TestCase):
             ob, reward, done, _ = env.step(action)
         return self.assertTrue(True)
 
+    def test__UniformAgent(self):
+        """Test `qtrader.agents.UniformAgent` class."""
+        env = qtrader.envs.DailyReturnEnv(
+            ['AAPL', 'MSFT', 'GE', 'VOD'], csv=CSV_PATH, end_date='2018')
+        ob = env.reset()
+        reward = 0
+        done = False
+        agent = qtrader.agents.UniformAgent(env.action_space)
+        for _ in range(10):
+            action = agent.act(ob, reward, done)
+            ob, reward, done, _ = env.step(action)
+        return self.assertTrue(True)
+
     def test__TangentAgent(self):
         """Test `qtrader.agents.TangentAgent` class."""
         env = qtrader.envs.DailyReturnEnv(
-            ['WIKI/AAPL', 'WIKI/MSFT', 'WIKI/GOOG'], source='quandl', start_date='2016-01-01')
+            ['AAPL', 'MSFT', 'GE', 'VOD'], csv=CSV_PATH, end_date='2018')
         # play with tangent portfolio agent
         ob = env.reset()
         reward = 0

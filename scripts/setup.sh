@@ -19,5 +19,7 @@ virtualenv -p ${PYTHON} ${ENV}
 source "./${ENV}/bin/activate"
 # install dependencies to virtual environment
 pip install -r requirements.txt
+# install qtrader package -local
+pip install -e .
 # run tests
 source scripts/test.sh

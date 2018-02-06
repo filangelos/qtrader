@@ -7,6 +7,8 @@ import unittest
 import numpy as np
 import qtrader
 
+CSV_PATH = 'tests/tmp/data/prices.csv'
+
 
 class TestEnvs(unittest.TestCase):
     """Test `qtrader.envs` module."""
@@ -14,7 +16,7 @@ class TestEnvs(unittest.TestCase):
     def test__DailyReturnEnv(self):
         """Test `qtrader.envs.DailyReturnEnv` class."""
         env = qtrader.envs.DailyReturnEnv(
-            ['WIKI/AAPL', 'WIKI/MSFT', 'WIKI/GOOGL'], source='quandl', start_date='2016-01-01')
+            ['AAPL', 'MSFT', 'GE', 'VOD'], csv=CSV_PATH, end_date='2018')
         env.reset()
         done = False
         rewards = []

@@ -4,8 +4,9 @@ pandas
 matplotlib
 seaborn
 sklearn
-tensorflow
 pandas-datareader
 gym
+http://download.pytorch.org/whl/torch-0.3.0.post4-cp36-cp36m-macosx_10_7_x86_64.whl 
+torchvision
 jupyter
 ptpython
