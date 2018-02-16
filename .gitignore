@@ -133,7 +133,7 @@ venv.bak/
 .mypy_cache/
 
 # tmp files
-tests/tmp/*
+tests/tmp/*.pdf
 
 # playground files
 playground
