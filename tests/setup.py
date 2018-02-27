@@ -1,7 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import unittest
 
 
@@ -33,13 +29,9 @@ class TestSetup(unittest.TestCase):
         import sklearn
         return self.assertIsNotNone(sklearn)
 
-    def test__pytorch(self):
-        import torch
-        return self.assertIsNotNone(torch)
-
-    def test__torchvision(self):
-        import torchvision
-        return self.assertIsNotNone(torchvision)
+    def test__tensorflow(self):
+        import tensorflow
+        return self.assertIsNotNone(tensorflow)
 
     def test__pandas_datareader(self):
         import pandas_datareader

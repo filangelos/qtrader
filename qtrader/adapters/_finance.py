@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-
 # scientific computing
 import numpy as np
 import pandas as pd
@@ -45,7 +42,12 @@ class Finance:
         return df[ticker]
 
     @classmethod
-    def Returns(cls, tickers, start_date=None, end_date=None, source='quandl', csv=None):
+    def Returns(cls,
+                tickers,
+                start_date=None,
+                end_date=None,
+                source='quandl',
+                csv=None):
         """Get daily returns for `tickers`.
 
         Parameters
@@ -57,10 +59,19 @@ class Finance:
         df: pandas.DataFrame
             Table of Returns of Adjusted Close prices for `tickers`
         """
-        return cls.Prices(tickers, start_date, end_date, source, csv).pct_change()[1:]
+        return cls.Prices(tickers,
+                          start_date,
+                          end_date,
+                          source,
+                          csv).pct_change()[1:]
 
     @classmethod
-    def Prices(cls, tickers, start_date=None, end_date=None, source='quandl', csv=None):
+    def Prices(cls,
+               tickers,
+               start_date=None,
+               end_date=None,
+               source='quandl',
+               csv=None):
         """Get daily prices for `tickers`.
 
         Parameters
@@ -74,10 +85,13 @@ class Finance:
         """
         if isinstance(csv, str):
             df = pd.DataFrame.from_dict(
-                {ticker: cls._csv(csv, ticker) for ticker in tickers}).loc[start_date:end_date]
+                {ticker: cls._csv(csv, ticker)
+                 for ticker in tickers}).loc[start_date:end_date]
         else:
-            df = pd.DataFrame.from_dict({ticker: cls._get(ticker, data_source=source, start=start_date,
-                                                          end=end_date)[cls._close_col[source]] for ticker in tickers})
+            df = pd.DataFrame.from_dict(
+                {ticker: cls._get(ticker, data_source=source, start=start_date,
+                                  end=end_date)[cls._close_col[source]]
+                 for ticker in tickers})
         if len(df.columns) == 1:
             df = df[df.columns[0]]
         return df

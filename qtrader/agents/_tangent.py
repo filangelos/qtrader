@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-
 from collections import deque
 
 import numpy as np
@@ -49,7 +46,7 @@ class TangentAgent(Agent):
         # equality constraint: weights sum up to 1.0
         con_portfolio_vector = {
             'type': 'eq',
-            'fun': lambda w: np.sum(w) - 1.0
+            'fun': lambda w: np.sum(w) - 1.0,
         }
         results = scipy.optimize.minimize(
             sharpe_ratio, w0,

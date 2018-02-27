@@ -1,7 +1,5 @@
-from __future__ import absolute_import
-from __future__ import division
-
 import numpy as np
+import pandas as pd
 
 import gym
 from gym import spaces
@@ -25,17 +23,15 @@ class PortfolioVector(gym.Space):
 
     def sample(self):
         """Draw random `PortfolioVector` sample."""
-        cache = []
-        for _ in range(self.shape[0] - 1):
-            remainder = 1.0 - np.abs(cache).sum()
-            cache.append(
-                np.random.uniform(-remainder, remainder))
-        cache.append(1.0 - np.abs(cache).sum())
-        return np.array(cache)
+        _vec = np.random.uniform(0, 1.0, self.shape[0])
+        return _vec / np.sum(_vec)
 
-    def contains(self, x):
+    def contains(self, x, tolerance=1e-5):
         """Assert if `x` in space."""
-        return x.shape == self.shape and (x >= self.low).all() and (x <= self.high).all() and (np.abs(np.abs(x).sum() - 1.0) < 1e-5)
+        shape_predicate = x.shape == self.shape
+        range_predicate = (x >= self.low).all() and (x <= self.high).all()
+        budget_constraint = np.abs(x.sum() - 1.0) < tolerance
+        return shape_predicate and range_predicate and budget_constraint
 
     @property
     def shape(self):
@@ -46,7 +42,8 @@ class PortfolioVector(gym.Space):
         return "PortfolioVector" + str(self.shape)
 
     def __eq__(self, other):
-        return np.allclose(self.low, other.low) and np.allclose(self.high, other.high)
+        return np.allclose(self.low, other.low) and \
+            np.allclose(self.high, other.high)
 
 
 class TradingEnv(gym.Env):
@@ -87,11 +84,13 @@ class TradingEnv(gym.Env):
             "`action_space`=%s" % (self.action_space))
 
         self.observation_space = spaces.Box(-np.inf,
-                                            np.inf, (self.num_instruments,), dtype=np.float32)
+                                            np.inf,
+                                            (self.num_instruments,),
+                                            dtype=np.float32)
         qtrader.framework.logger.info(
             "`observation_space`=%s" % (self.observation_space))
 
-        self.data = self._get_data(**kwargs).dropna()
+        self.data = pd.DataFrame(self._get_data(**kwargs).dropna())
         qtrader.framework.logger.info("`data`=%s" % (self.data.head()))
 
         self._counter = 0
@@ -105,8 +104,7 @@ class TradingEnv(gym.Env):
         raise NotImplementedError
 
     def step(self, action):
-        """
-        The agent takes a step in the environment.
+        """The agent takes a step in the environment.
 
         Parameters
         ----------
@@ -137,8 +135,7 @@ class TradingEnv(gym.Env):
         return observation, reward, done, info
 
     def reset(self):
-        """
-        Reset the state of the environment and returns an initial observation.
+        """Reset the state of the environment and returns an initial observation.
 
         Returns
         -------

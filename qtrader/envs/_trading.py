@@ -1,8 +1,5 @@
-from __future__ import absolute_import
-
 from qtrader.envs._base import TradingEnv
 from qtrader.adapters import Finance
-import qtrader
 
 
 class DailyReturnEnv(TradingEnv):

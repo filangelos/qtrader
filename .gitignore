@@ -140,3 +140,6 @@ playground
 
 # assets folder
 assets
+
+# temporary files
+tmp
