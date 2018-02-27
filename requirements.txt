@@ -3,7 +3,7 @@ scipy
 pandas
 matplotlib
 seaborn
-sklearn
+scikit-learn
 pandas-datareader
 gym
 tensorflow

@@ -11,7 +11,7 @@ setup(name='qtrader',
       install_requires=[
           'numpy',
           'pandas',
-          'sklearn',
+          'scikit-learn',
           'tensorflow',
           'pandas-datareader',
           'gym'
