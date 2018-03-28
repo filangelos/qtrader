@@ -143,3 +143,9 @@ assets
 
 # temporary files
 tmp
+
+# Jupyter Notebook folder
+notebooks
+
+# flask app folder
+www

@@ -13,3 +13,4 @@ statsmodels
 jupyter
 rise
 ptpython
+flask
