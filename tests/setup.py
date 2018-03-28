@@ -37,6 +37,14 @@ class TestSetup(unittest.TestCase):
         import pandas_datareader
         return self.assertIsNotNone(pandas_datareader)
 
+    def test__keras(self):
+        import keras
+        return self.assertIsNotNone(keras)
+
+    def test__edward(self):
+        import edward
+        return self.assertIsNotNone(edward)
+
     def test__qtrader(self):
         import qtrader
         return self.assertIsNotNone(qtrader)

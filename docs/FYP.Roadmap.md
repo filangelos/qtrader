@@ -42,9 +42,9 @@
 
 ### [26.03.18 - 01.04.18 | Week 1](../log/week_1.ipynb)
 
-- [ ] Pre-Training: `tangency-portfolio`
-- [ ] Market Simulation: baseline models
-- [ ] Environment: observation & OpenAI new API
+- [ ] **Pre-Training**: `tangency-portfolio`
+- [ ] **Market Simulation**: baseline models
+- [ ] **Environment**: observation & OpenAI new API
 
 ### 02.04.18 - 08.04.18 | Week 2
 

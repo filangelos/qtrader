@@ -7,5 +7,9 @@ scikit-learn
 pandas-datareader
 gym
 tensorflow
+keras
+edward
+statsmodels
 jupyter
+rise
 ptpython
