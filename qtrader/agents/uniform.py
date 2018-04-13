@@ -1,9 +1,9 @@
 import numpy as np
 
-from qtrader.agents.base import Agent
+from qtrader.agents.base import BaseAgent
 
 
-class UniformAgent(Agent):
+class UniformAgent(BaseAgent):
     """Uniform agent."""
 
     def __init__(self, action_space):

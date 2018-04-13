@@ -1,8 +1,8 @@
 import numpy as np
 
 
-class Agent:
-    """Base `Agent` Interface/Class."""
+class BaseAgent:
+    """`BaseAgent` Interface/Class."""
 
     def __init__(self, **kwargs):
         raise NotImplementedError

@@ -1,9 +1,9 @@
 import numpy as np
 
-from qtrader.agents.base import Agent
+from qtrader.agents.base import BaseAgent
 
 
-class RandomAgent(Agent):
+class RandomAgent(BaseAgent):
     """Random agent."""
 
     def __init__(self, action_space):
