@@ -3,7 +3,7 @@ from collections import deque
 import numpy as np
 import scipy.optimize
 
-from qtrader.agents._base import Agent
+from qtrader.agents.base import Agent
 
 
 class TangentAgent(Agent):

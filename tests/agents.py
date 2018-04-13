@@ -24,7 +24,7 @@ class TestAgents(unittest.TestCase):
 
     def test__UniformAgent(self):
         """Test `qtrader.agents.UniformAgent` class."""
-        env = qtrader.envs.DailyReturnEnv(
+        env = qtrader.envs.TradingEnv(
             ['AAPL', 'MSFT', 'GE', 'VOD'], csv=CSV_PATH, end_date='2018')
         ob = env.reset()
         reward = 0
@@ -37,7 +37,7 @@ class TestAgents(unittest.TestCase):
 
     def test__TangentAgent(self):
         """Test `qtrader.agents.TangentAgent` class."""
-        env = qtrader.envs.DailyReturnEnv(
+        env = qtrader.envs.TradingEnv(
             ['AAPL', 'MSFT', 'GE', 'VOD'], csv=CSV_PATH, end_date='2018')
         # play with tangent portfolio agent
         ob = env.reset()

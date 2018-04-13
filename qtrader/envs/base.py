@@ -7,55 +7,18 @@ from gym import spaces
 import qtrader
 
 
-class PortfolioVector(gym.Space):
-    """OpenAI Gym Spaces Portfolio Vector Struct."""
-
-    def __init__(self, num_instruments):
-        """Constructs a `PortfolioVector` object.
-
-        Parameters
-        ----------
-        num_instruments: int
-            Cardinality of universe
-        """
-        self.low = -np.ones(num_instruments, dtype=float)
-        self.high = np.ones(num_instruments, dtype=float)
-
-    def sample(self):
-        """Draw random `PortfolioVector` sample."""
-        _vec = np.random.uniform(0, 1.0, self.shape[0])
-        return _vec / np.sum(_vec)
-
-    def contains(self, x, tolerance=1e-5):
-        """Assert if `x` in space."""
-        shape_predicate = x.shape == self.shape
-        range_predicate = (x >= self.low).all() and (x <= self.high).all()
-        budget_constraint = np.abs(x.sum() - 1.0) < tolerance
-        return shape_predicate and range_predicate and budget_constraint
-
-    @property
-    def shape(self):
-        """Shape of `PortfolioVector` object."""
-        return self.low.shape
-
-    def __repr__(self):
-        return "PortfolioVector" + str(self.shape)
-
-    def __eq__(self, other):
-        return np.allclose(self.low, other.low) and \
-            np.allclose(self.high, other.high)
-
-
-class TradingEnv(gym.Env):
+class BaseEnv(gym.Env):
     """OpenAI Gym Trading Environment."""
 
-    def __init__(self, universe, **kwargs):
-        """Constructs a `TradingEnv` object.
+    def __init__(self, universe, trading_period='W', **kwargs):
+        """Constructs a `BaseEnv` object.
 
         Parameters
         ----------
         universe: list
             List of instruments universe
+        trading_period: str
+            Trading period offset alias, http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset-aliases
 
         Attributes
         ----------
@@ -70,16 +33,19 @@ class TradingEnv(gym.Env):
         data: pandas.DataFrame
             Historic data for `universe`
         """
-        qtrader.utils.valid_type(universe, list)
-
         self.universe = universe
         qtrader.framework.logger.info("`universe`=%s" % (self.universe))
+
+        self.trading_period = trading_period
+        qtrader.framework.logger.info(
+            "`trading_period`=%s" % (self.trading_period))
 
         self.num_instruments = len(self.universe)
         qtrader.framework.logger.info(
             "`num_instruments`=%s" % (self.num_instruments))
 
-        self.action_space = PortfolioVector(self.num_instruments)
+        self.action_space = qtrader.envs.spaces.PortfolioVector(
+            self.num_instruments)
         qtrader.framework.logger.info(
             "`action_space`=%s" % (self.action_space))
 

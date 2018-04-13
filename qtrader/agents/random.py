@@ -1,6 +1,6 @@
 import numpy as np
 
-from qtrader.agents._base import Agent
+from qtrader.agents.base import Agent
 
 
 class RandomAgent(Agent):

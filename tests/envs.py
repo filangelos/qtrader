@@ -9,9 +9,9 @@ CSV_PATH = 'tests/tmp/data/prices.csv'
 class TestEnvs(unittest.TestCase):
     """Test `qtrader.envs` module."""
 
-    def test__DailyReturnEnv(self):
-        """Test `qtrader.envs.DailyReturnEnv` class."""
-        env = qtrader.envs.DailyReturnEnv(
+    def test__TradingEnv(self):
+        """Test `qtrader.envs.TradingEnv` class."""
+        env = qtrader.envs.TradingEnv(
             ['AAPL', 'MSFT', 'GE', 'VOD'], csv=CSV_PATH, end_date='2018')
         env.reset()
         done = False

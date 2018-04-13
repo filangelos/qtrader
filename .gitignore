@@ -149,3 +149,6 @@ notebooks
 
 # flask app folder
 www
+
+# mini applications
+app

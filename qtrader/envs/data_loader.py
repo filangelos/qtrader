@@ -38,7 +38,8 @@ class Finance:
         ticker: str
             Ticker name
         """
-        df = pd.read_csv(root, index_col='Date').sort_index(ascending=True)
+        df = pd.read_csv(root, index_col='Date',
+                         parse_dates=True).sort_index(ascending=True)
         return df[ticker]
 
     @classmethod
@@ -47,6 +48,7 @@ class Finance:
                 start_date=None,
                 end_date=None,
                 source='quandl',
+                freq='B',
                 csv=None):
         """Get daily returns for `tickers`.
 
@@ -54,6 +56,8 @@ class Finance:
         ----------
         tickers: list
             List of ticker names
+        freq: str
+            Resampling frequency
         Returns
         -------
         df: pandas.DataFrame
@@ -63,6 +67,7 @@ class Finance:
                           start_date,
                           end_date,
                           source,
+                          freq,
                           csv).pct_change()[1:]
 
     @classmethod
@@ -71,6 +76,7 @@ class Finance:
                start_date=None,
                end_date=None,
                source='quandl',
+               freq='B',
                csv=None):
         """Get daily prices for `tickers`.
 
@@ -78,6 +84,8 @@ class Finance:
         ----------
         tickers: list
             List of ticker names
+        freq: str
+            Resampling frequency
         Returns
         -------
         df: pandas.DataFrame | pandas.Series
@@ -94,4 +102,4 @@ class Finance:
                  for ticker in tickers})
         if len(df.columns) == 1:
             df = df[df.columns[0]]
-        return df
+        return df.sort_index(ascending=True).resample(freq).last()

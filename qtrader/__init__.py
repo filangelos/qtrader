@@ -1,4 +1,3 @@
-import qtrader.adapters
 import qtrader.agents
 import qtrader.envs
 import qtrader.framework
