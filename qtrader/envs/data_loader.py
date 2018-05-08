@@ -2,16 +2,22 @@
 import numpy as np
 import pandas as pd
 
-# market data bundler
-import pandas_datareader.data as web
+import os
+import typing
+
+# market data provider
+import quandl
+quandl.ApiConfig.api_key = os.environ.get('QUANDL_API_KEY')
 
 
 class Finance:
     """Market Data Wrapper."""
-    _close_col = {'quandl': 'AdjClose', 'yahoo': 'Adj Close'}
+    _col = 'Adj. Close'
 
     @classmethod
-    def _get(cls, ticker, **kwargs):
+    def _get(cls,
+             ticker: str,
+             **kwargs):
         """Helper method for `web.DataReader`.
 
         Parameters
@@ -25,10 +31,12 @@ class Finance:
         df: pandas.DataFrame
             Table of prices for `ticker`
         """
-        return web.DataReader(ticker, **kwargs)
+        return quandl.get('WIKI/%s' % ticker, **kwargs)
 
     @classmethod
-    def _csv(cls, root, ticker):
+    def _csv(cls,
+             root: str,
+             ticker: str):
         """Helper method for loading prices from csv files.
 
         Parameters
@@ -44,12 +52,11 @@ class Finance:
 
     @classmethod
     def Returns(cls,
-                tickers,
-                start_date=None,
-                end_date=None,
-                source='quandl',
-                freq='B',
-                csv=None):
+                tickers: typing.List[str],
+                start_date: str = None,
+                end_date: str = None,
+                freq: str = 'B',
+                csv: typing.Optional[str] = None):
         """Get daily returns for `tickers`.
 
         Parameters
@@ -66,18 +73,16 @@ class Finance:
         return cls.Prices(tickers,
                           start_date,
                           end_date,
-                          source,
                           freq,
                           csv).pct_change()[1:]
 
     @classmethod
     def Prices(cls,
-               tickers,
-               start_date=None,
-               end_date=None,
-               source='quandl',
-               freq='B',
-               csv=None):
+               tickers: typing.List[str],
+               start_date: str = None,
+               end_date: str = None,
+               freq: str = 'B',
+               csv: typing.Optional[str] = None):
         """Get daily prices for `tickers`.
 
         Parameters
@@ -96,9 +101,9 @@ class Finance:
                 {ticker: cls._csv(csv, ticker)
                  for ticker in tickers}).loc[start_date:end_date]
         else:
-            df = pd.DataFrame.from_dict(
-                {ticker: cls._get(ticker, data_source=source, start=start_date,
-                                  end=end_date)[cls._close_col[source]]
+            df = pd.DataFrame(
+                {ticker: cls._get(ticker, start=start_date,
+                                  end=end_date)[cls._col]
                  for ticker in tickers})
         if len(df.columns) == 1:
             df = df[df.columns[0]]
