@@ -17,10 +17,13 @@ class TestEnvs(unittest.TestCase):
         done = False
         rewards = []
         np.random.seed(13)
+        agent = qtrader.agents.RandomAgent(env.action_space)
+        env.register(agent)
         while not done:
             _, reward, done, _ = env.step(
                 env.action_space.sample())  # random agent
             rewards.append(reward)
+        env.unregister(agent)
         return self.assertIsInstance(np.sum(rewards), float)
 
 

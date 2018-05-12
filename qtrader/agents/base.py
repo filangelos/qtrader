@@ -1,8 +1,10 @@
 import numpy as np
 
 
-class BaseAgent:
-    """`BaseAgent` Interface/Class."""
+class Agent:
+    """`Agent` Interface/Class."""
+
+    _id = 'base'
 
     def __init__(self, **kwargs):
         raise NotImplementedError
@@ -12,3 +14,7 @@ class BaseAgent:
 
     def act(self, observation, reward, done):
         raise NotImplementedError
+
+    @property
+    def name(self):
+        return self._id

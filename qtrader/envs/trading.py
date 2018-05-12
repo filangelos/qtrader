@@ -2,10 +2,14 @@ from qtrader.envs.base import BaseEnv
 from qtrader.envs.data_loader import Finance
 
 import pandas as pd
+import numpy as np
 
 
 class TradingEnv(BaseEnv):
     """OpenAI Gym Trading Environment with Daily Returns Reward."""
 
-    def _get_data(self, **kwargs):
-        return Finance.Returns(self.universe, freq=self.trading_period, **kwargs)
+    def _get_prices(self, **kwargs):
+        return Finance.Prices(self.universe, freq=self.trading_period, **kwargs)
+
+    def _get_reward(self, action):
+        return np.dot(self.returns.loc[self.index].values, action)

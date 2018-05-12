@@ -102,8 +102,8 @@ class Finance:
                  for ticker in tickers}).loc[start_date:end_date]
         else:
             df = pd.DataFrame(
-                {ticker: cls._get(ticker, start=start_date,
-                                  end=end_date)[cls._col]
+                {ticker: cls._get(ticker, start_date=start_date,
+                                  end_date=end_date)[cls._col]
                  for ticker in tickers})
         if len(df.columns) == 1:
             df = df[df.columns[0]]

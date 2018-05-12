@@ -1,10 +1,12 @@
 import numpy as np
 
-from qtrader.agents.base import BaseAgent
+from qtrader.agents.base import Agent
 
 
-class RandomAgent(BaseAgent):
+class RandomAgent(Agent):
     """Random agent."""
+
+    _id = 'random'
 
     def __init__(self, action_space):
         self.action_space = action_space

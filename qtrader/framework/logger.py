@@ -10,5 +10,6 @@ _level_map = {
     'ERROR': logging.ERROR
 }
 
+logging.basicConfig(level=_level_map[LOG_LEVEL.upper()])
+
 logger = logging.getLogger(LOG_NAME)
-logger.setLevel(_level_map[LOG_LEVEL.upper()])

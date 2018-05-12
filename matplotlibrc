@@ -74,7 +74,7 @@ backend      : TkAgg
 #### LINES
 ## See http://matplotlib.org/api/artist_api.html#module-matplotlib.lines for more
 ## information on line properties.
-lines.linewidth   : 2.5     ## line width in points
+#lines.linewidth   : 2.5     ## line width in points
 #lines.linestyle   : -       ## solid line
 #lines.color       : C0      ## has no affect on plot(); see axes.prop_cycle
 #lines.marker      : None    ## the default marker
@@ -289,11 +289,11 @@ lines.linewidth   : 2.5     ## line width in points
 #axes.grid.axis      : both    ## which axis the grid should apply to
 #axes.grid.which     : major   ## gridlines at major, minor or both ticks
 #axes.titlesize      : large   ## fontsize of the axes title
-#axes.titleweight    : normal  ## font weight of title
+axes.titleweight    : bold  ## font weight of title
 #axes.titlepad       : 6.0     ## pad between axes and title in points
 #axes.labelsize      : medium  ## fontsize of the x any y labels
 #axes.labelpad       : 4.0     ## space between label and axis
-#axes.labelweight    : normal  ## weight of the x and y labels
+axes.labelweight    : bold  ## weight of the x and y labels
 #axes.labelcolor     : black
 #axes.axisbelow      : line    ## draw axis gridlines and ticks below
                                ## patches (True); above patches but below
@@ -370,7 +370,7 @@ axes.prop_cycle    : cycler('color', ['b', 'g', 'r', 'c', 'm', 'y', 'k'])
 #xtick.color          : black  ## color of the tick labels
 #xtick.labelsize      : medium ## fontsize of the tick labels
 xtick.direction      : in    ## direction: in, out, or inout
-#xtick.minor.visible  : False  ## visibility of minor ticks on x-axis
+xtick.minor.visible  : True  ## visibility of minor ticks on x-axis
 #xtick.major.top      : True   ## draw x axis top major ticks
 #xtick.major.bottom   : True   ## draw x axis bottom major ticks
 #xtick.minor.top      : True   ## draw x axis top minor ticks
@@ -390,7 +390,7 @@ xtick.direction      : in    ## direction: in, out, or inout
 #ytick.color          : black  ## color of the tick labels
 #ytick.labelsize      : medium ## fontsize of the tick labels
 ytick.direction      : in    ## direction: in, out, or inout
-#ytick.minor.visible  : False  ## visibility of minor ticks on y-axis
+ytick.minor.visible  : True  ## visibility of minor ticks on y-axis
 #ytick.major.left     : True   ## draw y axis left major ticks
 #ytick.major.right    : True   ## draw y axis right major ticks
 #ytick.minor.left     : True   ## draw y axis left minor ticks

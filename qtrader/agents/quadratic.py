@@ -4,11 +4,13 @@ import numpy as np
 import scipy.optimize
 
 import qtrader.agents.pretrainer
-from qtrader.agents.base import BaseAgent
+from qtrader.agents.base import Agent
 
 
-class QuadraticAgent(BaseAgent):
+class QuadraticAgent(Agent):
     """Quadratic Programming agent."""
+
+    _id = 'quadratic'
 
     def __init__(self, action_space, J, window=10, *args):
         self.optimizer = qtrader.agents.pretrainer.optimizer(self._J(J), *args)

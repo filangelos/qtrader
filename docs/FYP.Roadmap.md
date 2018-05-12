@@ -7,8 +7,8 @@
 - [x] **observation**: prices vector
 - [ ] **reward**: modular
     * [ ] n-step learning
-    * [ ] sharpe/shortino ratio
-    * [ ] risk-aversion (parameterized by alpha)
+    * [x] sharpe/shortino ratio
+    * [x] risk-aversion (parameterized by alpha)
     * [ ] averaged return \bar{G}_{t} (instead of discounted return)
 - [ ] **project**: folder structure refinements
 
