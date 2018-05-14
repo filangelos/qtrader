@@ -15,13 +15,13 @@
 ### Misc
 
 - [ ] **`render`**: GUI
-    * [ ] PnL
+    * [x] PnL
     * [ ] Trading Signals
     * [ ] Transactions-to-Profit
-    * [ ] Drawdown
-    * [ ] Sector Risk & Exposures
+    * [x] Drawdown
+    * [x] Sector Risk & Exposures
     * [ ] Asset Risk & Exposures
-- [ ] **multi-agent**: trading accounts
+- [x] **multi-agent**: trading accounts
 
 ## Agents
 
@@ -40,6 +40,10 @@
 - [x] **`copulas`**: baseline model
 - [x] **`VAR`**: baseline model
 - [ ] **`VAE`**: recurrent variational autoencoder architecure
+- [ ] **criteria**:
+    - [ ]
+    - [ ]
+    - [ ]
 
 ---
 

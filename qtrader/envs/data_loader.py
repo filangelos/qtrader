@@ -105,6 +105,6 @@ class Finance:
                 {ticker: cls._get(ticker, start_date=start_date,
                                   end_date=end_date)[cls._col]
                  for ticker in tickers})
-        if len(df.columns) == 1:
-            df = df[df.columns[0]]
+        # if len(df.columns) == 1:
+        #     df = df[df.columns[0]]
         return df.sort_index(ascending=True).resample(freq).last()

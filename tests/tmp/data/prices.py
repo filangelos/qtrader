@@ -1,12 +1,9 @@
-import pandas as pd
-import pandas_datareader.data as web
+from qtrader.envs.data_loader import Finance
 
 TICKERS = ['AAPL', 'VOD', 'MSFT', 'GE']
+CSV_FILE = 'tests/tmp/data/prices.csv'
+start_date = '2010-01-01'
 
-df = pd.DataFrame(columns=TICKERS)
+df = Finance.Prices(TICKERS, start_date=start_date)
 
-for ticker in TICKERS:
-    df[ticker] = web.DataReader(
-        'WIKI/%s' % ticker, data_source='quandl', start='2015')['AdjClose']
-
-df.sort_index(ascending=True).to_csv('tests/tmp/data/prices.csv')
+df.sort_index(ascending=True).to_csv(CSV_FILE)

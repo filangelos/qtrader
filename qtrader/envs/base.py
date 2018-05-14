@@ -73,8 +73,8 @@ class BaseEnv(gym.Env):
         # agent's initial wealth
         self._pnl = pd.DataFrame(index=self.prices.index, columns=[
                                  agent.name for agent in self.agents])
-        # figure & axes for render()
-        self._fig, self._axes = plt.subplots(ncols=2, figsize=(12.8, 4.8))
+        # figure & axes placeholders
+        self._fig, self._axes = None, None
 
     @property
     def index(self) -> pd.DatetimeIndex:
@@ -88,9 +88,8 @@ class BaseEnv(gym.Env):
     def _get_observation(self) -> pd.DataFrame:
         return self.prices.loc[self.index, :]
 
-    @abstractmethod
     def _get_reward(self, action) -> float:
-        raise NotImplementedError
+        return np.dot(self.returns.loc[self.index].values, action)
 
     def _get_done(self) -> bool:
         return self.index == self.prices.index[-1]
@@ -195,6 +194,10 @@ class BaseEnv(gym.Env):
 
     def render(self) -> None:
         """Graphical interface of environment."""
+        # initialize figure and axes
+        if self._fig is None or self._axes is None:
+            # figure & axes for render()
+            self._fig, self._axes = plt.subplots(ncols=2, figsize=(12.8, 4.8))
         # remove everything from the axes
         self._axes[0].clear()
         self._axes[1].clear()
