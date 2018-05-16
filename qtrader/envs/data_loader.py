@@ -70,11 +70,16 @@ class Finance:
         df: pandas.DataFrame
             Table of Returns of Adjusted Close prices for `tickers`
         """
-        return cls.Prices(tickers,
-                          start_date,
-                          end_date,
-                          freq,
-                          csv).pct_change()[1:]
+        if isinstance(csv, str):
+            df = pd.DataFrame.from_dict(
+                {ticker: cls._csv(csv, ticker)
+                 for ticker in tickers}).loc[start_date:end_date]
+            return df
+        else:
+            return cls.Prices(tickers,
+                              start_date,
+                              end_date,
+                              freq).pct_change()[1:]
 
     @classmethod
     def Prices(cls,

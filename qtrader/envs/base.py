@@ -24,7 +24,7 @@ class BaseEnv(gym.Env):
         http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset-aliases
     num_instruments: int
         Cardinality of universe
-    action_space: gym.Space
+    action_space: qtrader.envs.spaces.PortfolioVector
         Agent's action space
     observation_space: gym.Space
         Agent's observation space
@@ -47,7 +47,7 @@ class BaseEnv(gym.Env):
         Add an agent to the environment (stock market)
     """
 
-    def __init__(self, universe, trading_period='W', **kwargs):
+    def __init__(self, universe, trading_period='W', prices=None, **kwargs):
         self.universe: typing.List[str] = universe
         self.trading_period: str = trading_period
         # risky assets & cash under consideration
@@ -61,7 +61,10 @@ class BaseEnv(gym.Env):
                                             (self.num_instruments,),
                                             dtype=np.float32)
         # market prices data
-        self.prices = self._get_prices(**kwargs).dropna()
+        if prices is None:
+            self.prices = self._get_prices(**kwargs).dropna()
+        else:
+            self.prices = prices.dropna()
         # add cash column
         self.prices['CASH'] = 1.0
         # relative (percentage) returns

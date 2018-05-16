@@ -1,0 +1,19 @@
+# rolling window size
+window: 20
+# trading period
+freq: 'w'
+# csv filename
+csv_file_returns: 'app/returns.csv'
+csv_file_prices: 'app/prices.csv'
+# first trading date
+start_date: "2010-01-01"
+# tickers
+tickers:
+  - 'AAPL'
+  - 'GE'
+  - 'JPM'
+  - 'GOOG'
+  - 'MSFT'
+  - 'VOD'
+  - 'GS'
+  - 'TSLA'

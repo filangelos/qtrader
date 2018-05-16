@@ -7,17 +7,16 @@
 - [x] **observation**: prices vector
 - [ ] **reward**: modular
     * [ ] n-step learning
-    * [x] sharpe/shortino ratio
-    * [x] risk-aversion (parameterized by alpha)
+    * [ ] sharpe/shortino ratio
+    * [ ] risk-aversion (parameterized by alpha)
     * [ ] averaged return \bar{G}_{t} (instead of discounted return)
-- [ ] **project**: folder structure refinements
+- [x] **project**: folder structure refinements
 
 ### Misc
 
 - [ ] **`render`**: GUI
     * [x] PnL
     * [ ] Trading Signals
-    * [ ] Transactions-to-Profit
     * [x] Drawdown
     * [x] Sector Risk & Exposures
     * [ ] Asset Risk & Exposures
@@ -36,14 +35,17 @@
 
 ## Market Simulation
 
-- [x] **`surrogates`**: baseline model
-- [x] **`copulas`**: baseline model
-- [x] **`VAR`**: baseline model
-- [ ] **`VAE`**: recurrent variational autoencoder architecure
-- [ ] **criteria**:
-    - [ ]
-    - [ ]
-    - [ ]
+- [x] **`surrogates`**: amplitude adjusted fourier transform baseline model
+- [x] **`VAR`**: vector autoregressive baseline model
+- [ ] **`VAE`**: vanilla variational autoencoder architecure
+- [ ] **`GAN`**: vanilla generative adversarial network
+- [ ] **evaluation criteria**:
+    - [x] **`Moments`**: statistical moments on raw & rolling data
+    - [x] statistical arbitrage of generated market
+        - [x] quadratic programming
+        - [x] random agent
+        - [ ] reinforcement agent (pre-trained)
+    - [ ] sector classification & statistics
 
 ---
 
@@ -64,12 +66,11 @@
 ### [09.04.18 - 15.04.18 | Week 3](../log/week_3.ipynb)
 
 - [ ] **Q**: meaningful interpretation of action-value function
-- [ ] **`render`**: GUI
+- [x] **`render`**: GUI
 
 ### [16.04.18 - 22.04.18 | Week 4](../log/week_4.ipynb)
 
-- [ ] **Multi-agent**: trading accounts
-- [ ] **`VAE`**: recurrent variational autoencoder architecure
+- [x] **Multi-agent**: trading accounts
 - [ ] **Reward**: modular
 
 ### [23.04.18 - 29.04.18 | Week 5](../log/week_5.ipynb)
@@ -81,6 +82,14 @@
 ### [07.05.18 - 13.05.18 | Week 7](../log/week_7.ipynb)
 
 ### [14.05.18 - 20.05.18 | Week 8](../log/week_8.ipynb)
+
+- [ ] **evaluation criteria**: market simulation
+    - [x] **`Moments`**: statistical moments on raw & rolling data
+    - [x] statistical arbitrage of generated market
+        - [x] quadratic programming
+        - [x] random agent
+- [ ] **`VAE`**: vanilla variational autoencoder architecure
+- [ ] **`GAN`**: vanilla generative adversarial network
 
 ### [21.05.18 - 27.05.18 | Week 9](../log/week_9.ipynb)
 

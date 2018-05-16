@@ -1,5 +1,7 @@
 import numpy as np
 
+from qtrader.utils.numpy import eps
+
 
 def _mu_p(w: np.ndarray, r: np.ndarray) -> float:
     """Portfolio Returns."""
@@ -35,4 +37,4 @@ def sharpe_ratio(w: np.ndarray, mu: np.ndarray,
     assert mu.shape[0] == Sigma.shape[0]
     assert w.shape == w0.shape
     # mean - alpha * variance - transaction_costs
-    return - (_mu_p(w, mu) / _sigma_p(w, Sigma) - _trans_costs(w, w0, gamma))
+    return - (_mu_p(w, mu) / (_sigma_p(w, Sigma) + eps) - _trans_costs(w, w0, gamma))

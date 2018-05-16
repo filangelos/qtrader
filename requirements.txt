@@ -4,13 +4,12 @@ pandas
 matplotlib
 seaborn
 scikit-learn
-pandas-datareader
+quandl
 gym
 tensorflow
 keras
-edward
-statsmodels
 jupyter
 rise
 ptpython
 flask
+h5py==2.8.0rc1

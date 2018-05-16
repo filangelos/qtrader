@@ -17,3 +17,7 @@ def append_row(array, row):
         Modified array
     """
     return np.r_[array, [row]]
+
+
+# machine accuracy
+eps = np.finfo(float).eps

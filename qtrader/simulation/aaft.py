@@ -1,14 +1,13 @@
 import numpy as np
 import pandas as pd
 
-from statsmodels.tsa.api import VAR as _VAR
-import statsmodels.tsa.vector_ar.util as var_util
 
-
-def AAFT(ts, random=np.random.uniform, random_state=None):
+def AAFT(df, random=np.random.uniform, random_state=None):
     """Amplitude Adjusted Fourier Transform Baseline Generator."""
     # set random seed
     np.random.seed(random_state)
+    # Operate on numpy.ndarray
+    ts = df.values
     # 2d time-series format
     _ts = ts.reshape(len(ts), -1)
     # Odd number of samples
@@ -25,21 +24,7 @@ def AAFT(ts, random=np.random.uniform, random_state=None):
         F_tsi_new = F_tsi * rv_phase
         # Inverse Fourier Transformation
         ts_gen[:, i] = np.fft.irfft(F_tsi_new)
-    return ts_gen
-
-
-def VAR(ts, max_order=15):
-    """Vector Autoregressive Baseline Generator."""
-    # VAR model
-    if isinstance(ts, pd.DataFrame):
-        var = _VAR(ts.values)
-    elif isinstance(ts, np.ndarray):
-        var = _VAR(ts)
-    # optimal order
-    order = var.select_order(max_order)['aic']
-    # fit model
-    model = var.fit(order)
-    # simulation
-    ts_gen = var_util.varsim(model.coefs, model.intercept,
-                             model.sigma_u, steps=len(ts.values))
-    return ts_gen
+    # Create pandas DataFrame
+    df_gen = pd.DataFrame(ts_gen, columns=df.columns,
+                          index=df.index[-len(ts_gen):])
+    return df_gen
