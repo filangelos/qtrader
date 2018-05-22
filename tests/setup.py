@@ -45,9 +45,9 @@ class TestSetup(unittest.TestCase):
     #     import edward
     #     return self.assertIsNotNone(edward)
 
-    # def test__statsmodels(self):
-    #     import statsmodels
-    #     return self.assertIsNotNone(statsmodels)
+    def test__statsmodels(self):
+        import statsmodels
+        return self.assertIsNotNone(statsmodels)
 
     def test__qtrader(self):
         import qtrader

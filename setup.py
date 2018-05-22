@@ -10,11 +10,14 @@ setup(name='qtrader',
       packages=find_packages(),
       install_requires=[
           'numpy',
+          'scipy',
           'pandas',
+          'matplotlib',
+          'seaborn',
           'scikit-learn',
-          'tensorflow',
-          'pandas-datareader',
-          'gym'
+          'quandl',
+          'gym',
+          'tensorflow'
       ],
       test_suite='tests'
       )

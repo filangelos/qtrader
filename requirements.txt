@@ -7,9 +7,8 @@ scikit-learn
 quandl
 gym
 tensorflow
-keras
 jupyter
 rise
-ptpython
 flask
 h5py==2.8.0rc1
+pydot

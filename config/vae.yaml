@@ -1,0 +1,19 @@
+# timesteps
+time_steps: 50
+# trading period
+freq: 'w'
+# number of samples
+num_samples: 500
+# batch size
+batch_size: 1
+# VAE intermediate dimension
+intermediate_dim: 32
+# VAE latent dimension
+latent_dim: 50
+# number of training epochs
+num_epochs: 50
+# csv filename
+csv_file_returns: 'app/returns.csv'
+csv_file_prices: 'app/prices.csv'
+# first trading date
+start_date: "2010-01-01"

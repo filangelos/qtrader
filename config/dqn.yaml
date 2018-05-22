@@ -1,5 +1,3 @@
-# rolling window size
-window: 50
 # trading period
 freq: 'w'
 # csv filename
@@ -7,6 +5,8 @@ csv_file_returns: 'db/returns.csv'
 csv_file_prices: 'db/prices.csv'
 # first trading date
 start_date: "2010-01-01"
+# number of training episodes
+num_episodes: 10000
 # tickers
 tickers:
   - 'AAPL'
@@ -17,13 +17,3 @@ tickers:
   - 'VOD'
   - 'GS'
   - 'TSLA'
-# number of samples
-num_samples: 500
-# batch size
-batch_size: 1
-# VAE intermediate dimension
-intermediate_dim: 32
-# VAE latent dimension
-latent_dim: 50
-# number of training epochs
-num_epochs: 50
