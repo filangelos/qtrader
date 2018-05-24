@@ -55,7 +55,8 @@ class Finance:
         """
         df = pd.read_csv(root, index_col='Date',
                          parse_dates=True).sort_index(ascending=True)
-        return df[tickers]
+        union = [ticker for ticker in tickers if ticker in df.columns]
+        return df[union]
 
     @classmethod
     def Returns(cls,
@@ -78,10 +79,7 @@ class Finance:
             Table of Returns of Adjusted Close prices for `tickers`
         """
         if isinstance(csv, str):
-            df = pd.DataFrame.from_dict(
-                {ticker: cls._csv(csv, ticker)
-                 for ticker in tickers}).loc[start_date:end_date]
-            return df
+            return cls._csv(csv, tickers).loc[start_date:end_date]
         else:
             return cls.Prices(tickers,
                               start_date,
@@ -109,7 +107,7 @@ class Finance:
             Table of Adjusted Close prices for `tickers`
         """
         if isinstance(csv, str):
-            df = cls._csv(csv, tickers).loc[start_date:end_date]
+            return cls._csv(csv, tickers).loc[start_date:end_date]
         else:
             # tmp dictionary of panda.Series
             data = {}
