@@ -84,6 +84,11 @@ class BaseEnv(gym.Env):
         """Current index."""
         return self.prices.index[self._counter]
 
+    @property
+    def _max_episode_steps(self) -> int:
+        """Number of timesteps available."""
+        return len(self.prices.index)
+
     @abstractmethod
     def _get_prices(self, **kwargs) -> pd.DataFrame:
         raise NotImplementedError

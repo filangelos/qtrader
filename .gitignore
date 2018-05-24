@@ -132,11 +132,8 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# tmp files
-tests/tmp/*.pdf
-
 # playground files
-playground
+/playground/
 
 # Jupyter Notebook folder
 notebooks
@@ -145,10 +142,10 @@ notebooks
 www
 
 # mini applications
-app
+/app/
 
 # report assets
-assets
+/assets/
 
 # cached data
-db
+/db/

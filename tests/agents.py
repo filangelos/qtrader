@@ -4,7 +4,7 @@ import qtrader
 
 import gym
 
-CSV_PATH = 'tests/tmp/data/prices.csv'
+CSV_PATH = 'db/prices.csv'
 
 
 class TestAgents(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestAgents(unittest.TestCase):
     def test__UniformAgent(self):
         """Test `qtrader.agents.UniformAgent` class."""
         env = qtrader.envs.TradingEnv(
-            ['AAPL', 'MSFT', 'GE', 'VOD'], csv=CSV_PATH, end_date='2018')
+            ['AAPL', 'MSFT', 'GE', 'JPM'], csv=CSV_PATH, end_date='2018')
         ob = env.reset()
         reward = 0
         done = False
@@ -40,7 +40,7 @@ class TestAgents(unittest.TestCase):
     def test__QuadraticAgent_Tangent(self):
         """Test `qtrader.agents.QuadraticAgent` class."""
         env = qtrader.envs.TradingEnv(
-            ['AAPL', 'MSFT', 'GE', 'VOD'], csv=CSV_PATH, end_date='2018')
+            ['AAPL', 'MSFT', 'GE', 'JPM'], csv=CSV_PATH, end_date='2018')
         # play with tangent portfolio agent
         ob = env.reset()
         reward = 0
@@ -73,7 +73,7 @@ class TestAgents(unittest.TestCase):
     def test__QuadraticAgent_Risk_Aversion(self):
         """Test `qtrader.agents.QuadraticAgent` class."""
         env = qtrader.envs.TradingEnv(
-            ['AAPL', 'MSFT', 'GE', 'VOD'], csv=CSV_PATH, end_date='2018')
+            ['AAPL', 'MSFT', 'GE', 'JPM'], csv=CSV_PATH, end_date='2018')
         # play with tangent portfolio agent
         ob = env.reset()
         reward = 0

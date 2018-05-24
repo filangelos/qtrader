@@ -1,6 +1,5 @@
 import qtrader
 
-import yaml
 import random
 from collections import deque
 

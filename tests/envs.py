@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 import qtrader
 
-CSV_PATH = 'tests/tmp/data/prices.csv'
+CSV_PATH = 'db/prices.csv'
 
 
 class TestEnvs(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestEnvs(unittest.TestCase):
     def test__TradingEnv(self):
         """Test `qtrader.envs.TradingEnv` class."""
         env = qtrader.envs.TradingEnv(
-            ['AAPL', 'MSFT', 'GE', 'VOD'], csv=CSV_PATH, end_date='2018')
+            ['AAPL', 'MSFT', 'GE', 'JPM'], csv=CSV_PATH, end_date='2018')
         env.reset()
         done = False
         rewards = []
