@@ -1,0 +1,21 @@
+# universe start date
+start_date: "2015-01-01"
+# trading frequency
+freq: 'W-FRI'
+# trading stocks
+tickers:
+  - 'AAPL'
+  - 'GE'
+  - 'JPM'
+  - 'MSFT'
+  - 'VOD'
+  - 'GS'
+  - 'TSLA'
+  - 'MMM'
+# csv filename
+csv_file_returns: 'db/returns.csv'
+csv_file_prices: 'db/prices.csv'
+# rolling window size
+window: 20
+# transaction costs coefficient
+beta: 0.0025

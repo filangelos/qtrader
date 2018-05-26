@@ -7,5 +7,5 @@ import pandas as pd
 class TradingEnv(BaseEnv):
     """OpenAI Gym Trading Environment with Daily Returns Reward."""
 
-    def _get_prices(self, **kwargs) -> pd.DataFrame:
-        return Finance.Prices(self.universe, freq=self.trading_period, **kwargs)
+    def _get_prices(self, universe, trading_period, **kwargs) -> pd.DataFrame:
+        return Finance.Prices(universe, freq=trading_period, **kwargs)

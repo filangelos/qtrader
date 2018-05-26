@@ -11,5 +11,5 @@ class UniformAgent(Agent):
     def __init__(self, action_space):
         self.N = action_space.shape[0]
 
-    def act(self, observation, reward, done):
+    def act(self, observation):
         return np.ones(self.N) / self.N

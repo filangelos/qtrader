@@ -117,10 +117,6 @@ class Finance:
                 # successful data fetchinf
                 if tmp_df is not None:
                     data[ticker] = tmp_df[cls._col]
-                # log progress
-                if i % 10 == 0:
-                    logger.debug('%d out of %d tickers completed' %
-                                 (i+1, len(tickers)))
             # dict to pandas.DataFrame
             df = pd.DataFrame(data)
         return df.sort_index(ascending=True).resample(freq).last()

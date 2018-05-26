@@ -12,7 +12,7 @@ class BinaryAgent(Agent):
     def __init__(self, action_space):
         self.N = action_space.shape[0]
 
-    def act(self, observation, reward, done):
+    def act(self, observation):
         b = random.randint(0, self.N - 1)
         c = np.zeros(self.N)
         c[b] = 1

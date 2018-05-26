@@ -7,8 +7,8 @@ def generator(num_samples, data, optimizer, window, short_sales=True):
     # input data shape
     N, M = data.shape
     # generated dataset
-    X = np.empty((num_samples, window, M), dtype=float)
-    y = np.zeros((num_samples, M), dtype=float)
+    X = np.empty((num_samples-window+1, window, M), dtype=float)
+    y = np.zeros((num_samples-window+1, M), dtype=float)
     # iterate over rolling windows
     for i, frame in enumerate(qtrader.utils.rolling2d(data, window)):
         try:

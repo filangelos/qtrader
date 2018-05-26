@@ -33,7 +33,7 @@ def cardinalities(env: Env) -> typing.Tuple[int, int]:
     return observation_space_cardinality, action_space_cardinality
 
 
-def run(env: Env, agent: Agent, num_episodes: int, log: bool = False) -> typing.Tuple[typing.List[typing.List[float]], typing.List[typing.List[np.ndarray]]]:
+def run(env: Env, agent: Agent, num_episodes: int, record: bool = True, log: bool = False):
     """Run episode on the `env` using `agent`.
 
     Parameters
@@ -44,6 +44,8 @@ def run(env: Env, agent: Agent, num_episodes: int, log: bool = False) -> typing.
         Agent to interact with the environment
     num_episodes: int
         Number of episodes to run
+    record: bool
+        Keep record of actions & rewards for each step
     log: bool
         Flag for logging at the end of each episode
 
@@ -54,6 +56,10 @@ def run(env: Env, agent: Agent, num_episodes: int, log: bool = False) -> typing.
     actions: list
         List of actions per step per episode
     """
+    # unregister all agents from environment
+    if hasattr(env, 'unregister'):
+        # when agent=None, all agents unregistered
+        env.unregister(agent=None)
     # register agent to environment if needed
     if hasattr(env, 'register'):
         # assign random name if not given
@@ -91,7 +97,8 @@ def run(env: Env, agent: Agent, num_episodes: int, log: bool = False) -> typing.
             # agent closure: determine action
             action = agent.act(ob)
             # environment: take action
-            ob_, reward, done, info = env.step(action)
+            ob_, reward, done, info = env.step({agent.name: action})
+            reward = reward[agent.name]
             # store reward
             _rewards.append(reward)
             # store action
@@ -109,10 +116,12 @@ def run(env: Env, agent: Agent, num_episodes: int, log: bool = False) -> typing.
     for e in range(num_episodes):
         # run episode
         R, A = _run()
-        # store rewards
-        rewards.append(R)
-        # store actions
-        actions.append(A)
+        # episode-wise records
+        if record:
+            # store rewards
+            rewards.append(R)
+            # store actions
+            actions.append(A)
         # log cumulative rewards
         if log:
             print('episode: %4d, cumulative reward: %+.5f' % (e, sum(R)))

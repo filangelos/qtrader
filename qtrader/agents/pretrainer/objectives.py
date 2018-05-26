@@ -31,10 +31,10 @@ def risk_aversion(w: np.ndarray, mu: np.ndarray,
 
 def sharpe_ratio(w: np.ndarray, mu: np.ndarray,
                  Sigma: np.ndarray, w0: np.ndarray,
-                 gamma: float) -> float:
+                 beta: float) -> float:
     """Sharpe Ratio with Transaction Costs."""
     assert Sigma.shape[0] == Sigma.shape[1]
     assert mu.shape[0] == Sigma.shape[0]
     assert w.shape == w0.shape
     # mean - alpha * variance - transaction_costs
-    return - (_mu_p(w, mu) / (_sigma_p(w, Sigma) + eps) - _trans_costs(w, w0, gamma))
+    return - ((_mu_p(w, mu) - _trans_costs(w, w0, beta)) / (_sigma_p(w, Sigma) + eps))

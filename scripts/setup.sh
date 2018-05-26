@@ -12,9 +12,11 @@ source scripts/remove.sh
 ${PYTHON} -m venv ${ENV}
 # activate virtual environment
 source "./${ENV}/bin/activate"
-# install dependencies to virtual environment
-pip install -r requirements.txt
 # install qtrader package -local
 pip install -e .
+# install development dependencies
+pip install -r requirements.txt
+# upgrade pip
+pip install --upgrade pip
 # run tests
 source scripts/test.sh

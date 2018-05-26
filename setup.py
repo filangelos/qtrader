@@ -17,7 +17,11 @@ setup(name='qtrader',
           'scikit-learn',
           'quandl',
           'gym',
-          'tensorflow'
+          'tensorflow',
+          'torch',
+          'statsmodels',
+          'pyyaml',
+          'bs4'
       ],
       test_suite='tests'
       )

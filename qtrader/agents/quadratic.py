@@ -18,10 +18,10 @@ class QuadraticAgent(Agent):
         self.memory = deque(maxlen=window)
         self.w = self.action_space.sample()
 
-    def observe(self, observation):
+    def observe(self, observation, action, reward, done, next_observation):
         self.memory.append(observation.values)
 
-    def act(self, observation, reward, done):
+    def act(self, observation):
         # deque -> np.array, for easy math
         memory = np.array(self.memory)
         # number of assets

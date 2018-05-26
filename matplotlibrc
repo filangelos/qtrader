@@ -37,7 +37,7 @@
 ##
 ## If you omit this parameter, it will always default to "Agg", which is a
 ## non-interactive backend.
-##backend      : TkAgg
+backend      : TkAgg
 
 ## Note that this can be overridden by the environment variable
 ## QT_API used by Enthought Tool Suite (ETS); valid values are
@@ -523,12 +523,12 @@ savefig.dpi         : 300   ## figure dots per inch or 'figure'
 #savefig.facecolor   : white    ## figure facecolor when saving
 #savefig.edgecolor   : white    ## figure edgecolor when saving
 savefig.format      : pdf      ## png, ps, pdf, svg
-savefig.bbox        : tight ## 'tight' or 'standard'.
+#savefig.bbox        : tight ## 'tight' or 'standard'.
                                 ## 'tight' is incompatible with pipe-based animation
                                 ## backends but will workd with temporary file based ones:
                                 ## e.g. setting animation.writer to ffmpeg will not work,
                                 ## use ffmpeg_file instead
-savefig.pad_inches  : 0.01      ## Padding to be used when bbox is set to 'tight'
+#savefig.pad_inches  : 0.01      ## Padding to be used when bbox is set to 'tight'
 #savefig.jpeg_quality: 95       ## when a jpeg is saved, the default quality parameter.
 #savefig.directory   : ~        ## default directory in savefig dialog box,
                                 ## leave empty to always use current working directory

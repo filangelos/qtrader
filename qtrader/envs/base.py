@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import typing
 
 import gym
-from gym import spaces
 
 import qtrader
 from qtrader.agents.base import Agent
@@ -22,8 +21,6 @@ class BaseEnv(gym.Env):
     trading_period: str
         Trading period offset alias,
         http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset-aliases
-    num_instruments: int
-        Cardinality of universe
     action_space: qtrader.envs.spaces.PortfolioVector
         Agent's action space
     observation_space: gym.Space
@@ -47,141 +44,200 @@ class BaseEnv(gym.Env):
         Add an agent to the environment (stock market)
     """
 
-    def __init__(self, universe, trading_period='W', prices=None, **kwargs):
-        self.universe: typing.List[str] = universe
-        self.trading_period: str = trading_period
+    class Record:
+        """Local data structure for actions and rewards records.
+
+        Attributes
+        ----------
+        actions: pandas.DataFrame
+            Table of actions performed by agent
+        rewards: pandas.DataFrame
+            Table of rewards received by agent
+        """
+
+        def __init__(self, index, columns):
+            # records of actions
+            self.actions = pd.DataFrame(
+                columns=columns, index=index, dtype=float)
+            self.actions.iloc[0] = np.zeros(len(columns))
+            self.actions.iloc[0]['CASH'] = 1.0
+            # records of rewards
+            self.rewards = pd.DataFrame(
+                columns=columns, index=index, dtype=float)
+            self.rewards.iloc[0] = np.zeros(len(columns))
+
+    def __init__(self,
+                 universe: typing.Optional[typing.List[str]] = None,
+                 prices: typing.Optional[pd.DataFrame] = None,
+                 trading_period: str = 'W-FRI',
+                 **kwargs):
+        # --------------------------------------------------------------------------
+        # either `universe` or `prices` non-None
+        if not (universe is None) ^ (prices is None):
+            raise ValueError(
+                'either `universe` or `prices` should be non-None')
+        # --------------------------------------------------------------------------
+        # set trading period
+        self.trading_period = trading_period
+        # <prices> provided
+        if prices is not None and isinstance(prices, pd.DataFrame):
+            # prices table
+            self._prices = qtrader.utils.pandas.clean(
+                prices.resample(self.trading_period).last())
+        # <universe> provided
+        elif universe is not None and isinstance(universe, list):
+            # fetch prices
+            self._prices = qtrader.utils.pandas.clean(
+                self._get_prices(universe,
+                                 trading_period=self.trading_period, **kwargs))
+        # --------------------------------------------------------------------------
         # risky assets & cash under consideration
-        self.num_instruments: int = len(self.universe) + 1
+        num_instruments: int = len(self.universe) + 1
         # risky assets & cash portfolio vector
         self.action_space = qtrader.envs.spaces.PortfolioVector(
-            self.num_instruments)
+            num_instruments)
         # risky assets & cash prices vector
-        self.observation_space = spaces.Box(-np.inf,
-                                            np.inf,
-                                            (self.num_instruments,),
-                                            dtype=np.float32)
-        # market prices data
-        if prices is None:
-            self.prices = self._get_prices(**kwargs).dropna()
-        else:
-            self.prices = prices.dropna()
+        self.observation_space = gym.spaces.Box(-np.inf,
+                                                np.inf,
+                                                (num_instruments,),
+                                                dtype=np.float32)
+        # --------------------------------------------------------------------------
         # add cash column
-        self.prices['CASH'] = 1.0
+        self._prices['CASH'] = 1.0
         # relative (percentage) returns
-        self.returns = self.prices.pct_change()
+        self._returns = self._prices.pct_change()
+        # --------------------------------------------------------------------------
         # counter to follow time index
         self._counter = 0
-        # list of registered agents
-        self.agents = []
+        # --------------------------------------------------------------------------
+        # dictionary of registered agents
+        self.agents = {}
         # agent's initial wealth
-        self._pnl = pd.DataFrame(index=self.prices.index, columns=[
+        self._pnl = pd.DataFrame(index=self.dates, columns=[
                                  agent.name for agent in self.agents])
+        # --------------------------------------------------------------------------
         # figure & axes placeholders
         self._fig, self._axes = None, None
 
     @property
+    def universe(self):
+        """List of instruments universe."""
+        return self._prices.columns.tolist()
+
+    @property
+    def dates(self):
+        """Dates of the environment prices."""
+        return self._prices.index
+
+    @property
     def index(self) -> pd.DatetimeIndex:
         """Current index."""
-        return self.prices.index[self._counter]
+        return self.dates[self._counter]
 
     @property
     def _max_episode_steps(self) -> int:
         """Number of timesteps available."""
-        return len(self.prices.index)
+        return len(self.dates)
 
     @abstractmethod
-    def _get_prices(self, **kwargs) -> pd.DataFrame:
+    def _get_prices(self, universe, trading_period, **kwargs) -> pd.DataFrame:
         raise NotImplementedError
 
-    def _get_observation(self) -> pd.DataFrame:
-        return self.prices.loc[self.index, :]
+    def _get_observation(self) -> object:
+        ob = {}
+        ob['prices'] = self._prices.loc[self.index, :]
+        ob['returns'] = self._returns.loc[self.index, :]
+        return ob
 
-    def _get_reward(self, action) -> float:
-        return np.dot(self.returns.loc[self.index].values, action)
+    def _get_reward(self, action) -> pd.Series:
+        return self._returns.loc[self.index] * action
 
     def _get_done(self) -> bool:
-        return self.index == self.prices.index[-1]
+        return self.index == self.dates[-1]
 
     def _get_info(self) -> dict:
         return {}
 
+    def _validate_agents(self):
+        """Check agents' availability."""
+        if len(self.agents) == 0:
+            raise RuntimeError('no agent registed in the environment')
+
+    #######
+    # API
+    #######
+
     def register(self, agent: Agent):
         """Register an `agent` to the environment."""
-        if agent not in self.agents:
-            self.agents.append(agent)
-            self._pnl[agent.name] = np.nan
-            self._pnl[agent.name].iloc[0] = 1.0
-            qtrader.framework.logger.info(
-                "New agent %s registered in %s" % (agent, self))
-        else:
-            qtrader.framework.logger.info(
-                "%s already registered in %s" % (agent, self))
+        # verify interface
+        if not hasattr(agent, 'name'):
+            raise ValueError('agent must have a `name` attribute.')
+        # verify uniqueness
+        if agent.name not in self.agents:
+            self.agents[agent.name] = self.Record(
+                columns=self.universe, index=self.dates)
 
-    def unregister(self, agent: Agent):
+    def unregister(self, agent: typing.Optional[Agent]):
         """Unregister an `agent` from the environment."""
-        if agent in self.agents:
-            self.agents.remove(agent)
-            self._pnl.drop(columns=[agent.name], inplace=True)
+        # when agent=None, unregister all agents
+        if agent is None:
+            # clean records
+            self.agents = {}
+            return None
+        # --------------------------------------------------------------------------
+        # verify interface
+        if not hasattr(agent, 'name'):
+            raise ValueError('agent must have a `name` attribute.')
+        # verify availability
+        if agent.name in self.agents:
+            del self.agents[agent.name]
 
-    def step(self, action) -> typing.Tuple[object, float, bool, dict]:
+    def step(self, action: typing.Union[object, typing.Dict[str, object]]):
         """The agent takes a step in the environment.
 
         Parameters
         ----------
-        action: numpy.array | list
-            Portfolio vector
+        action: numpy.array | dict
+            Portfolio vector(s)
 
         Returns
         -------
         observation, reward, episode_over, info: tuple
             * observation: object
                 Observation of the environment
-            * reward: float
-                Reward received after this step
+            * reward: float | dict
+                Reward(s) received after this step
             * done: bool
                 Flag for finished episode
             * info: dict
                 Information about this step
         """
-        # check agents' availability
-        if len(self.agents) == 0:
-            raise RuntimeError('no agent registed in the environment')
+        self._validate_agents()
         # timestep
         self._counter += 1
         # fetch return values
         observation = self._get_observation()
         done = self._get_done()
         info = self._get_info()
-        # multiple registered agents
-        if len(self.agents) > 1:
-            reward = []
-            # iterate over agents
-            if len(action) != len(self.agents):
-                raise ValueError(
-                    'invalid number of actions provided'
-                )
-            for i, A in enumerate(action):
-                # action validity check
-                if not self.action_space.contains(A):
-                    raise ValueError(
-                        'invalid `action` attempted: %s' % (A)
-                    )
-                reward.append(self._get_reward(A))
-                # calculate new wealth level
-                self._pnl[self.agents[i].name].iloc[self._counter] = (
-                    1+reward[-1]) * self._pnl[self.agents[i].name].iloc[self._counter - 1]
-        # single agent
-        else:
+        # verify interface
+        if action.keys() != self.agents.keys():
+            raise ValueError(
+                'invalid interface of actions provided'
+            )
+        # container
+        reward = {}
+        # iterate over agents
+        for name, A in action.items():
             # action validity check
-            if not self.action_space.contains(action):
+            if not self.action_space.contains(A):
                 raise ValueError(
-                    'invalid `action` attempted: %s' % (action)
+                    'invalid `action` attempted: %s' % (A)
                 )
-            # calculate reward
-            reward = self._get_reward(action)
-            # calculate new wealth level
-            self._pnl[self.agents[0].name].iloc[self._counter] = (
-                1+reward) * self._pnl[self.agents[0].name].iloc[self._counter - 1]
+            # actions buffer
+            self.agents[name].actions.loc[self.index] = A
+            self.agents[name].rewards.loc[self.index] = self._get_reward(A)
+            # return value
+            reward[name] = self.agents[name].rewards.loc[self.index].sum()
         return observation, reward, done, info
 
     def reset(self) -> object:
@@ -192,13 +248,12 @@ class BaseEnv(gym.Env):
         observation: object
             The initial observation of the space.
         """
+        self._validate_agents()
         # set time to zero
         self._counter = 0
-        # reset agent's wealth
-        self._pnl = pd.DataFrame(index=self.prices.index, columns=[
-                                 agent.name for agent in self.agents])
-        self._pnl.iloc[0] = [1.0 for _ in self.agents]
-        return self.prices.loc[self.index, :]
+        # get initial observation
+        ob = self._get_observation()
+        return ob
 
     def render(self) -> None:
         """Graphical interface of environment."""
@@ -206,15 +261,23 @@ class BaseEnv(gym.Env):
         if self._fig is None or self._axes is None:
             # figure & axes for render()
             self._fig, self._axes = plt.subplots(ncols=2, figsize=(12.8, 4.8))
+        #
+        _pnl = pd.DataFrame(columns=self.agents.keys(),
+                            index=self.dates)
+        # calculate PnL
+        for agent in self.agents:
+            # collapse date-wise rewards
+            _pnl[agent] = (self.agents[agent].rewards.sum(
+                axis=1) + 1).cumprod()
         # remove everything from the axes
         self._axes[0].clear()
         self._axes[1].clear()
         # axes content
-        self.prices.loc[:self.index].plot(ax=self._axes[0])
-        self._pnl.loc[:self.index].plot(ax=self._axes[1])
+        self._prices.loc[:self.index].plot(ax=self._axes[0])
+        _pnl.loc[:self.index].plot(ax=self._axes[1])
         # axes settings
-        self._axes[0].set_xlim(self.prices.index.min(),
-                               self.prices.index.max())
+        self._axes[0].set_xlim(self.dates.min(),
+                               self.dates.max())
         self._axes[0].set_title('Market Prices')
         self._axes[0].set_ylabel('Prices')
         self._axes[1].set_xlim(self._pnl.index.min(),
