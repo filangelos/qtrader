@@ -12,10 +12,8 @@ def VAR(df, max_order=15):
         var = _VAR(df.values)
     elif isinstance(df, np.ndarray):
         var = _VAR(df)
-    # optimal order
-    order = var.select_order(max_order)['aic']
     # fit model
-    model = var.fit(order)
+    model = var.fit(maxlags=max_order, ic='aic')
     # simulation
     ts_gen = var_util.varsim(model.coefs, model.intercept,
                              model.sigma_u, steps=len(df.values))

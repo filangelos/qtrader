@@ -1,3 +1,5 @@
+from qtrader.utils.gym import run
+
 import numpy as np
 
 from abc import abstractmethod
@@ -31,3 +33,6 @@ class Agent:
 
     def end_episode(self):
         pass
+
+    def fit(self, env, num_episodes=1, verbose=False):
+        return run(env, self, num_episodes, True, verbose)

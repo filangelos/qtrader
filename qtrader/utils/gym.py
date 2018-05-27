@@ -1,7 +1,6 @@
 import numpy as np
 
 from gym import Env
-from qtrader.agents.base import Agent
 
 import typing
 import os
@@ -33,7 +32,9 @@ def cardinalities(env: Env) -> typing.Tuple[int, int]:
     return observation_space_cardinality, action_space_cardinality
 
 
-def run(env: Env, agent: Agent, num_episodes: int, record: bool = True, log: bool = False):
+def run(env: Env, agent,
+        num_episodes: int,
+        record: bool = True, log: bool = False):
     """Run episode on the `env` using `agent`.
 
     Parameters
@@ -96,9 +97,16 @@ def run(env: Env, agent: Agent, num_episodes: int, record: bool = True, log: boo
         while (not done) and (j < env._max_episode_steps):
             # agent closure: determine action
             action = agent.act(ob)
-            # environment: take action
-            ob_, reward, done, info = env.step({agent.name: action})
-            reward = reward[agent.name]
+            # class 1: trading environments
+            if hasattr(env, 'register'):
+                # environment: take action
+                ob_, reward, done, info = env.step({agent.name: action})
+                # fetch agent-specific reward
+                reward = reward[agent.name]
+            # class 2: vanilla environments
+            else:
+                # environment: take action
+                ob_, reward, done, info = env.step(action)
             # store reward
             _rewards.append(reward)
             # store action

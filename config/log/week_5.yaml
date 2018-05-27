@@ -1,0 +1,17 @@
+# universe start date
+start_date: "2017-01-01"
+# training start date
+training_start_date: "2015-01-01"
+# trading frequency
+freq: 'W-FRI'
+# trading stocks
+tickers:
+  - 'AAPL'
+  - 'GE'
+  - 'JPM'
+  - 'MSFT'
+  - 'GS'
+  - 'MMM'
+# csv filename
+csv_file_returns: 'db/returns.csv'
+csv_file_prices: 'db/prices.csv'

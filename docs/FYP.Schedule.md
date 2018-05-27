@@ -22,14 +22,14 @@
 
 ## [02.04.18 - 08.04.18 | Week 2](../log/week_2.ipynb)
 
-- [ ] **`Agent::API::base`**
-    * [ ] `fit` method
-    * [ ] private API (agent-specific)
-    * [ ] public API (environment runner friendly)
+- [x] **`Agent::API::base`**
+    * [x] `fit` method
+    * [x] private API (agent-specific)
+    * [x] public API (environment runner friendly)
 
-- [ ] **`Environment::API::runner`**
-    * [ ] fixed agent API
-    * [ ] multiple episodes
+- [x] **`Environment::API::runner`**
+    * [x] fixed agent API
+    * [x] multiple episodes
 
 ## [09.04.18 - 15.04.18 | Week 3](../log/week_3.ipynb)
 
@@ -46,22 +46,21 @@
 
 ## [23.04.18 - 29.04.18 | Week 5](../log/week_5.ipynb)
 
-- [ ] **`Agent::model-based::persistance`**
-    - [ ] sine waves
-    - [ ] market data
+- [x] **`Agent::model-based::persistence`**
+    - [x] softmax policy
 
-- [ ] **`Agent::model-based::ARIMA`**
-    - [ ] sine waves
-    - [ ] market data
+- [x] **`Agent::model-based::VAR`**
+    - [x] softmax policy
+    - [x] binary trader
 
-- [ ] **`Agent::model-based::RNN`**
-    - [ ] sine waves
-    - [ ] market data
+- [x] **`Agent::model-based::RNN`**
+    - [x] softmax policy
+    - [x] binary trader
  
 ## [30.04.18 - 06.05.18 | Week 6](../log/week_6.ipynb)
 
 - [ ] **`Agent::model-free::DQN`**
-    - [ ] sine waves
+    - [ ] LONG
     - [ ] market data
 
 ## [07.05.18 - 13.05.18 | Week 7](../log/week_7.ipynb)

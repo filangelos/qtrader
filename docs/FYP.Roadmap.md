@@ -25,9 +25,9 @@
 - [x] **multi-agent**: trading accounts
     * [x] rewards `pandas.DataFrame`
     * [x] actions `pandas.DataFrame`
-- [ ] **runner**: automated execution
-    * [ ] fixed agent API
-    * [ ] multiple episodes
+- [x] **runner**: automated execution
+    * [x] fixed agent API
+    * [x] multiple episodes
 
 ### GUI
 
@@ -43,10 +43,10 @@
 
 ### API
 
-- [ ] **base**: common interface
-    * [ ] `fit` method
-    * [ ] private API (agent-specific)
-    * [ ] public API (environment runner friendly)
+- [x] **base**: common interface
+    * [x] `fit` method
+    * [x] private API (agent-specific)
+    * [x] public API (environment runner friendly)
 
 ### evaluation-metrics
 
@@ -73,9 +73,9 @@
 
 ### model-base
 
-- [ ] **persistance**: one-step look back
-- [ ] **ARIMA**: autoregressive integrated moving average environment model
-- [ ] **RNN**: recurrent neural network environment model
+- [x] **persistence**: one-step look back
+- [x] **VAR**: vector autoregressive environment model
+- [x] **RNN**: recurrent neural network environment model
 
 ### model-free
 

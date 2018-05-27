@@ -70,6 +70,7 @@ class BaseEnv(gym.Env):
                  universe: typing.Optional[typing.List[str]] = None,
                  prices: typing.Optional[pd.DataFrame] = None,
                  trading_period: str = 'W-FRI',
+                 cash: bool = True,
                  **kwargs):
         # --------------------------------------------------------------------------
         # either `universe` or `prices` non-None
@@ -91,8 +92,14 @@ class BaseEnv(gym.Env):
                 self._get_prices(universe,
                                  trading_period=self.trading_period, **kwargs))
         # --------------------------------------------------------------------------
-        # risky assets & cash under consideration
-        num_instruments: int = len(self.universe) + 1
+        # add cash column
+        if cash:
+            self._prices['CASH'] = 1.0
+        # relative (percentage) returns
+        self._returns = self._prices.pct_change()
+        # --------------------------------------------------------------------------
+        # risky assets (& cash) under consideration
+        num_instruments: int = len(self.universe)
         # risky assets & cash portfolio vector
         self.action_space = qtrader.envs.spaces.PortfolioVector(
             num_instruments)
@@ -101,11 +108,6 @@ class BaseEnv(gym.Env):
                                                 np.inf,
                                                 (num_instruments,),
                                                 dtype=np.float32)
-        # --------------------------------------------------------------------------
-        # add cash column
-        self._prices['CASH'] = 1.0
-        # relative (percentage) returns
-        self._returns = self._prices.pct_change()
         # --------------------------------------------------------------------------
         # counter to follow time index
         self._counter = 0
