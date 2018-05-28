@@ -1,0 +1,21 @@
+# universe start date
+start_date: "2017-01-01"
+# trading frequency
+freq: 'W-FRI'
+# trading stocks
+tickers:
+  - 'AAPL'
+  - 'GE'
+  - 'JPM'
+  - 'MSFT'
+  - 'GS'
+  - 'MMM'
+# csv filename
+csv_file_returns: 'db/returns.csv'
+csv_file_prices: 'db/prices.csv'
+# number of episodes
+num_episodes: 250
+# number of neurons in hidden layer
+hidden_layer: 50
+# replay memory capacity
+capacity: 3000

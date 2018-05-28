@@ -60,7 +60,7 @@
 ## [30.04.18 - 06.05.18 | Week 6](../log/week_6.ipynb)
 
 - [ ] **`Agent::model-free::DQN`**
-    - [ ] LONG
+    - [ ] binary trader
     - [ ] market data
 
 ## [07.05.18 - 13.05.18 | Week 7](../log/week_7.ipynb)

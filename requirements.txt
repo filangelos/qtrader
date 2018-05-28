@@ -3,3 +3,4 @@ jupyter
 rise
 pylint
 autopep8
+ipykernel
