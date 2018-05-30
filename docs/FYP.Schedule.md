@@ -59,9 +59,9 @@
  
 ## [30.04.18 - 06.05.18 | Week 6](../log/week_6.ipynb)
 
-- [ ] **`Agent::model-free::DQN`**
-    - [ ] binary trader
-    - [ ] market data
+- [x] **`Agent::model-free::DQN`**
+    - [x] binary trader
+    - [ ] softmax policy
 
 ## [07.05.18 - 13.05.18 | Week 7](../log/week_7.ipynb)
 

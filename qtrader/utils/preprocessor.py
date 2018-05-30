@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from qtrader.utils.numpy import eps
+
 
 def rolling1d(series, window):
     """Rolling window for a 1D series.
@@ -55,43 +57,85 @@ def rolling2d(array, window):
     return out
 
 
-def softmax(X, theta=1.0, axis=None):
-    """Compute the softmax of each element along an axis of X.
+def Xy(series, window, out_shape=1):
+    """Time series to supervised data.
 
     Parameters
     ----------
-    X: ND-Array. Probably should be floats. 
-    theta (optional): float parameter, used as a multiplier
-        prior to exponentiation. Default = 1.0
-    axis (optional): axis to compute values along. Default is the 
-        first non-singleton axis.
+    series: list | numpy.ndarray | pandas.Series
+        Sequential 1D data
+    window: int
+        Window size
+    out_shape: int
+        Output vectors shape
 
-    Returns an array the same size as X. The result will sum to 1
-    along the specified axis.
-
-    References
-    ----------
-    .. [NC] Nolan Conaway, A softmax function for numpy,
-            online available at
-            https://nolanbconaway.github.io/blog/2017/softmax-numpy
-
+    Returns
+    -------
+    X: numpy.ndarray
+        Feature matrix
+    y: numpy.ndarray
+        Target matrix
     """
-    # make X at least 2d
-    y = np.atleast_2d(X)
-    # find axis
-    if axis is None:
-        axis = next(j[0] for j in enumerate(y.shape) if j[1] > 1)
-    # multiply y against the theta parameter,
-    y = y * float(theta)
-    # subtract the max for numerical stability
-    y = y - np.expand_dims(np.max(y, axis=axis), axis)
-    # exponentiate y
-    y = np.exp(y)
-    # take the sum along the specified axis
-    ax_sum = np.expand_dims(np.sum(y, axis=axis), axis)
-    # finally: divide elementwise
-    p = y / ax_sum
-    # flatten if X was 1D
-    if len(X.shape) == 1:
-        p = p.flatten()
-    return p
+    tmp = rolling1d(series, window+out_shape)
+    X = tmp[:, :-out_shape]
+    y = tmp[:, -out_shape:]
+    return X, y
+
+
+def standard(array):
+    """Standardise data, column-wise.
+
+    Parameters
+    ----------
+    array: numpy.ndarray | pandas.Series | pandas.DataFrame
+        Data to be standardised.
+
+    Returns
+    -------
+    standard_array: numpy.ndarray | pandas.Series | pandas.DataFrame
+        Standardised data.
+    """
+    if array.ndim > 3:
+        raise ValueError('array must be up to 3rd order tensor')
+    axis = array.ndim - 2
+    return (array - array.mean(axis=axis, keepdims=True)) / \
+        (array.std(axis=axis, keepdims=True) + eps)
+
+
+def flatten(array):
+    """Flatten 3D array to 2D.
+
+    Parameters
+    ----------
+    array: numpy.ndarray
+        3D data to be flattened.
+
+    Returns
+    flat_array: numpy.ndarray
+        2D flattened array.
+    """
+    if array.ndim != 3:
+        raise ValueError('array must be 3D')
+    N, L, M = array.shape
+    return array.reshape(N, L*M)
+
+
+def deflatten(array, window):
+    """De-flatten 2D array to 3D, given window.
+
+    Parameters
+    ----------
+    array: numpy.ndarray
+        2D data to de-flatten.
+
+    Returns
+    -------
+    deflat_array: numpy.ndarray
+        3D deflattened data.
+    """
+    if array.ndim != 2:
+        raise ValueError('array must be 2D')
+    N, LM = array.shape
+    if (LM / window) % 1 != 0:
+        raise ValueError('invalid window size')
+    return array.reshape(N, window, LM // window)

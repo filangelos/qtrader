@@ -10,7 +10,7 @@ def generator(num_samples, data, optimizer, window, short_sales=True):
     X = np.empty((num_samples-window+1, window, M), dtype=float)
     y = np.zeros((num_samples-window+1, M), dtype=float)
     # iterate over rolling windows
-    for i, frame in enumerate(qtrader.utils.rolling2d(data, window)):
+    for i, frame in enumerate(qtrader.utils.preprocessor.rolling2d(data, window)):
         try:
             # empirical mean estimate
             mu_r = np.mean(frame, axis=0)

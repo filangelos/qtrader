@@ -19,6 +19,8 @@ setup(name='qtrader',
           'gym',
           'tensorflow',
           'torch',
+          'torchvision',
+          'pyro-ppl',
           'statsmodels',
           'pyyaml',
           'bs4'
