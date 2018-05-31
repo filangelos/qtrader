@@ -1,5 +1,9 @@
 # library logger
 from qtrader.framework.logger import logger
+# library VAR simulator
+from qtrader.simulation import VAR as _VAR
+# library pandas cleaner
+from qtrader.utils.pandas import clean
 
 # scientific computing
 import numpy as np
@@ -15,6 +19,7 @@ quandl.ApiConfig.api_key = os.environ.get('QUANDL_API_KEY')
 
 class Finance:
     """Market Data Wrapper."""
+
     _col = 'Adj. Close'
 
     @classmethod
@@ -26,13 +31,14 @@ class Finance:
         Parameters
         ----------
         ticker: str
-            Ticker name
+            Ticker name.
         **kwargs: dict
-            Arguments for `quandl.get`
+            Arguments for `quandl.get`.
+
         Returns
         -------
         df: pandas.DataFrame
-            Market data for `ticker`
+            Market data for `ticker`.
         """
         try:
             return quandl.get('WIKI/%s' % ticker, **kwargs)
@@ -44,14 +50,19 @@ class Finance:
     def _csv(cls,
              root: str,
              tickers: typing.Union[str, typing.List[str]]):
-        """Helper method for loading prices from csv files.
+        """Helper method for loading prices from CSV files.
 
         Parameters
         ----------
         root: str
-            Path of csv file
+            Path of CSV file.
         ticker: str
-            Ticker name
+            Ticker name.
+
+        Returns
+        -------
+        cache: pandas.Series | pandas.DataFrame
+            Cached data from CSV.
         """
         df = pd.read_csv(root, index_col='Date',
                          parse_dates=True).sort_index(ascending=True)
@@ -64,19 +75,26 @@ class Finance:
                 start_date: str = None,
                 end_date: str = None,
                 freq: str = 'B',
-                csv: typing.Optional[str] = None):
-        """Get daily returns for `tickers`.
+                csv: str = None):
+        """Get returns for `tickers`.
 
         Parameters
         ----------
         tickers: list
-            List of ticker names
-        freq: str
-            Resampling frequency
+            List of ticker names.
+        start_date: str, optional
+            Start date in format 'YYYY-MM-DD'.
+        end_date: str, optional
+            End date in format 'YYYY-MM-DD'.
+        freq: str, optional
+            Resampling frequency.
+        csv: str, optional
+            CSV file path.
+
         Returns
         -------
         df: pandas.DataFrame
-            Table of Returns of Adjusted Close prices for `tickers`
+            Table of Returns of Adjusted Close prices for `tickers`.
         """
         if isinstance(csv, str):
             return cls._csv(csv, tickers).loc[start_date:end_date]
@@ -92,19 +110,26 @@ class Finance:
                start_date: str = None,
                end_date: str = None,
                freq: str = 'B',
-               csv: typing.Optional[str] = None):
-        """Get daily prices for `tickers`.
+               csv: str = None):
+        """Get prices for `tickers`.
 
         Parameters
         ----------
         tickers: list
-            List of ticker names
-        freq: str
-            Resampling frequency
+            List of ticker names.
+        start_date: str, optional
+            Start date in format 'YYYY-MM-DD'.
+        end_date: str, optional
+            End date in format 'YYYY-MM-DD'.
+        freq: str, optional
+            Resampling frequency.
+        csv: str, optional
+            CSV file path.
+
         Returns
         -------
         df: pandas.DataFrame | pandas.Series
-            Table of Adjusted Close prices for `tickers`
+            Table of Adjusted Close prices for `tickers`.
         """
         if isinstance(csv, str):
             return cls._csv(csv, tickers).loc[start_date:end_date]
@@ -142,3 +167,98 @@ class Finance:
         # ignore prices & returns
         else:
             return sp500
+
+
+class VAR:
+    """Vector Autoregressive Process Wrapper."""
+
+    @classmethod
+    def Returns(cls,
+                tickers: typing.List[str],
+                start_date: str = None,
+                end_date: str = None,
+                freq: str = 'B',
+                csv: str = None,
+                model_order: int = 2,
+                return_params: bool = False):
+        """Get VAR simulated returns for `tickers`.
+
+        Parameters
+        ----------
+        tickers: list
+            List of ticker names.
+        start_date: str, optional
+            Start date in format 'YYYY-MM-DD'.
+        end_date: str, optional
+            End date in format 'YYYY-MM-DD'.
+        freq: str, optional
+            Resampling frequency.
+        csv: str, optional
+            CSV file path.
+        model_order: int, optional
+            VAR model order.
+        return_params: bool, optional
+            Return pandas.DataFrame of model parameters.
+
+        Returns
+        -------
+        df: pandas.DataFrame
+            Table of Returns of Adjusted Close prices for `tickers`.
+        params: pandas.DataFrame
+            VAR model parameters.
+        """
+        df = clean(Finance.Returns(tickers, start_date, end_date, freq, csv))
+        sim_df, model = _VAR(df, model_order, True)
+        if return_params:
+            return sim_df, model.params
+        else:
+            return sim_df
+
+    @classmethod
+    def Prices(cls,
+               tickers: typing.List[str],
+               start_date: str = None,
+               end_date: str = None,
+               freq: str = 'B',
+               csv: str = None,
+               model_order: int = 2,
+               return_params: bool = False):
+        """Get prices for `tickers`.
+
+        Parameters
+        ----------
+        tickers: list
+            List of ticker names.
+        start_date: str, optional
+            Start date in format 'YYYY-MM-DD'.
+        end_date: str, optional
+            End date in format 'YYYY-MM-DD'.
+        freq: str, optional
+            Resampling frequency.
+        csv: str, optional
+            CSV file path.
+        model_order: int, optional
+            VAR model order.
+        return_params: bool, optional
+            Return pandas.DataFrame of model parameters.
+
+        Returns
+        -------
+        df: pandas.DataFrame | pandas.Series
+            Table of Adjusted Close prices for `tickers`.
+        params: pandas.DataFrame
+            VAR model parameters.
+        """
+        if return_params:
+            returns, params = cls.Returns(tickers, start_date,
+                                          end_date, freq, csv,
+                                          model_order, return_params)
+        else:
+            returns = cls.Returns(tickers, start_date,
+                                  end_date, freq, csv,
+                                  model_order, return_params)
+        prices = (clean(returns) + 1).cumprod()
+        if return_params:
+            return prices, params
+        else:
+            return prices

@@ -8,6 +8,9 @@
 - [x] **`setup.py`**: PyPI-friendly
     * [x] `requirements.txt`: development only
     * [x] tests
+- [ ] **report**: strategy/agent comparison summary
+    * `plotting`: PnL, trades, drawdown
+    * `stats`: PnL, sharpe ratio, hit rate, adjusted metrics
 
 ## Environment
 
@@ -54,9 +57,9 @@
     * [ ] sine waves
     * [ ] sawtooth waves
     * [ ] chirp waves
-- [ ] **S&P500**: 5 years data
-    * [ ] handful universe
-    * [ ] whole market
+- [x] **S&P500**: 5 years data
+    * [x] handful universe
+    * [x] whole market
 
 ### baseline models
 
@@ -95,8 +98,8 @@
 
 ### baseline-models
 
-- [ ] **AAFT**: amplitude adjusted fourier transform baseline model
-- [ ] **VAR**: vector autoregressive baseline model
+- [x] **AAFT**: amplitude adjusted fourier transform baseline model
+- [x] **VAR**: vector autoregressive baseline model
 
 ### generative-models
 

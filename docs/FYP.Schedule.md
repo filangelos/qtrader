@@ -71,9 +71,9 @@
 
 ## [14.05.18 - 20.05.18 | Week 8](../log/week_8.ipynb)
 
-- [ ] **`Market-Simulation::evaluation-metrics::moments`**
-    * [ ] up to forth order
-    * [ ] visualization
+- [x] **`Market-Simulation::evaluation-metrics::moments`**
+    * [x] up to forth order
+    * [x] visualization
 
 - [ ] **`Market-Simulation::evaluation-metrics::arbitrage`**
     * [ ] quadratic programming
@@ -89,12 +89,16 @@
 
 ## [28.05.18 - 03.06.18 | Week 10](../log/week_10.ipynb)
 
+- [x] **`Library::report`**
+    * [x] plotting
+    * [x] stats
+
+## [04.06.18 - 10.06.18 | Week 11](../log/week_11.ipynb)
+
 - [ ] **`Market-Simulation::generative-models::GAN`**
     * [ ] fixed size sequence generation
     * [ ] recurrent architecture
     * [ ] comparison to baselines
-
-## [04.06.18 - 10.06.18 | Week 11](../log/week_11.ipynb)
 
 ## [11.06.18 - 17.06.18 | Week 12](../log/week_12.ipynb)
 

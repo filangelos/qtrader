@@ -289,3 +289,25 @@ class BaseEnv(gym.Env):
         # draw throttled
         plt.pause(0.0001)
         self._fig.canvas.draw()
+
+    def summary(self) -> pd.DataFrame:
+        """Generate statistics summary and figures.
+
+        Returns
+        -------
+        table: pd.DataFrame
+            Strategy report.
+        """
+        summary = {}
+        for agent in self.agents:
+            prices = self._prices
+            returns = self.agents[agent].rewards.sum(axis=1)
+            returns.name = agent
+            weights = self.agents[agent].actions
+            # set name for figures
+            weights.name = agent
+            # statistics summary
+            summary[agent] = qtrader.utils.summary.stats(returns)
+            # summary figures
+            qtrader.utils.summary.figure(prices, returns, weights)
+        return pd.DataFrame(summary)

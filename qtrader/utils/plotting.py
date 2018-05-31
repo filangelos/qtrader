@@ -2,7 +2,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from qtrader.utils.econometric import pnl as PnL
+from qtrader.utils.econometric import pnl as _PnL
+from qtrader.utils.econometric import drawdown as _drawdown
+from qtrader.utils.econometric import max_drawdown as _max_drawdown
 
 
 def time_series(series, title='', xlabel='', ylabel='', path=None):
@@ -35,6 +37,7 @@ def time_series(series, title='', xlabel='', ylabel='', path=None):
     ax.set(title=title,
            xlabel=xlabel,
            ylabel=ylabel)
+    ax.xaxis.set_tick_params(rotation=45)
     if path is not None:
         fig.savefig(path)
     fig.show()
@@ -50,9 +53,9 @@ def pnl(returns, path=None):
     path: str, optional
         Path to store figure.
     """
-    _pnl = PnL(returns)
+    _pnl = _PnL(returns)
     if hasattr(returns, 'name'):
-        title = f"{returns.name}: Profit & Loss"
+        title = f"{returns.name or 'Strategy'}: Profit & Loss"
     else:
         title = 'Profit & Loss'
     xlabel = 'Time'
@@ -73,9 +76,13 @@ def trades(prices, weights, path=None):
         Path to store figure.
     """
     fig, axes = plt.subplots(nrows=2, sharex=True, gridspec_kw={
-        'height_ratios': [4, 1], 'wspace': 0.01})
-    prices.plot(ax=axes[0], color='b')
-    weights.plot(ax=axes[1], color='g')
+        'height_ratios': [3, 1], 'wspace': 0.01})
+    axes[0].plot(prices.index, prices.values, color='b')
+    axes[1].bar(weights.index, weights.values, color='g')
+    axes[0].set(title='%s: Prices & Portfolio Weights' % (prices.name or 'Strategy'),
+                ylabel='Price, $p_{t}$')
+    axes[1].set(xlabel='Time', ylabel='Weight, $w_{t}$', ylim=[0, 1])
+    axes[1].xaxis.set_tick_params(rotation=45)
     fig.subplots_adjust(hspace=.0)
     if path is not None:
         fig.savefig(path)
@@ -97,6 +104,31 @@ def table_image(array, path=None):
     fig, ax = plt.subplots()
     ax.imshow(array, cmap=plt.cm.Greys)
     ax.axis('off')
+    if path is not None:
+        fig.savefig(path)
+    fig.show()
+
+
+def drawdown(returns, path=None):
+    """Plot drawdown along with PnL.
+
+    Prameters
+    ---------
+    returns: pandas.Series
+        Returns of the strategy as a percentage, noncumulative.
+    path: str, optional
+        Path to store figure.
+    """
+    pnl = _PnL(returns)
+    neg_drawdown = - _drawdown(returns)
+    neg_max_drawdown = - _max_drawdown(returns)
+    fig, ax = plt.subplots()
+    pnl.plot(label='Profit & Loss', ax=ax)
+    neg_drawdown.plot(label='Drawdown', ax=ax)
+    neg_max_drawdown.plot(label='Max Drawdown', ax=ax)
+    ax.set(title=f'{returns.name or "Strategy"}: Profit & Loss with Drawdown',
+           ylabel='Wealth Level', xlabel='Time')
+    ax.legend()
     if path is not None:
         fig.savefig(path)
     fig.show()
