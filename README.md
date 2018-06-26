@@ -20,3 +20,5 @@
 * [Interim Report](docs/FYP.Interim-Report.pdf): Introduction to `qtrader`
 * [Papers Review](docs/FYP.Related-Work.pdf): Motivation, pros & cons of existing methods
 * [Resources](docs/FYP.Resources.md): List of relevant resources
+* [Final Report](docs/FYP.Final-Report.pdf): Master's Thesis
+* [Presentation](docs/FYP.Presentation.pdf): 15 minutes project presentation
